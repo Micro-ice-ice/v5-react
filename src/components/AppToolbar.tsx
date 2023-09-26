@@ -1,4 +1,4 @@
-import {AppBar, createTheme, Grid, IconButton, Menu, MenuItem, ThemeProvider, Toolbar, Typography} from "@mui/material";
+import {AppBar, createTheme, Menu, MenuItem, ThemeProvider, Toolbar, Typography} from "@mui/material";
 
 import LayersIcon from '@mui/icons-material/Layers';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
@@ -10,8 +10,9 @@ import InfoIcon from '@mui/icons-material/Info';
 import TuneIcon from '@mui/icons-material/Tune';
 import HelpIcon from '@mui/icons-material/Help';
 import LogoutIcon from '@mui/icons-material/Logout';
-import {useState} from "react";
+import React, {useState} from "react";
 import AppToolbarButton from "./AppToolbarButton.tsx";
+import {NestedMenuItem} from "mui-nested-menu";
 
 const AppToolbar = () => {
 
@@ -23,21 +24,20 @@ const AppToolbar = () => {
         },
     });
 
-    const buttonSx = {m: 0.5, p: 0, width: '4rem'};
-    const textSx = {fontSize: '0.65rem', whiteSpace: 'nowrap', textAlign: 'center'};
-    const iconSx = {fontSize: '1.75rem'}
-
     //notes menu
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-    const open = Boolean(anchorEl);
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const [anchorElNotes, setAnchorElNotes] = useState<null | HTMLElement>(null)
+    const openNotes = Boolean(anchorElNotes);
+    const handleClickOpenNotes = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorElNotes(event.currentTarget);
+    const handleCloseNotes = () => setAnchorElNotes(null);
 
-        console.log(event.currentTarget);
-        setAnchorEl(event.currentTarget);
-    };
+    const [anchorElSewLine, setAnchorElSewLine] = useState<null | HTMLElement>(null);
+    const openSewLine = Boolean(anchorElSewLine);
+    const handleMoveSewLine = (event: React.MouseEvent<HTMLElement>) => setAnchorElSewLine(event.currentTarget);
 
-    const handleClose = () => {
-        setAnchorEl(null);
+    const handleCloseSewLine = () => {
+
+        console.log('close Sew Line');
+        setAnchorElSewLine(null);
     };
 
     return (
@@ -49,14 +49,7 @@ const AppToolbar = () => {
                         V5 React
                     </Typography>
 
-                    <IconButton edge="start" color="inherit" sx={buttonSx}>
-                        <Grid container direction="column" alignItems="center">
-                            <LayersIcon sx={iconSx}/>
-                            <Typography variant="caption" sx={textSx}>
-                                Стек
-                            </Typography>
-                        </Grid>
-                    </IconButton>
+                    <AppToolbarButton icon={LayersIcon} text={"Стек"} edge={"start"}/>
 
                     <AppToolbarButton icon={WbSunnyIcon} text={"Окно"}/>
 
@@ -64,38 +57,16 @@ const AppToolbar = () => {
 
                     <AppToolbarButton icon={OpenWithIcon} text={"Панорама"}/>
 
-                    <IconButton color="inherit" sx={buttonSx}>
-                        <Grid container direction="column" alignItems="center">
-                            <ViewInArIcon sx={iconSx}/>
-                            <Typography variant="caption" sx={textSx}>
-                                3D
-                            </Typography>
-                        </Grid>
-                    </IconButton>
+                    <AppToolbarButton icon={ViewInArIcon} text={"3D"}/>
 
-                    <IconButton
-                        id="notesButton"
-                        color="inherit"
-                        sx={buttonSx}
-                        aria-controls={open ? 'basic-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                        onClick={handleClick}
-                    >
-                        <Grid container direction="column" alignItems="center">
-                            <CallMadeIcon sx={iconSx}/>
-                            <Typography variant="caption" sx={textSx}>
-                                Примечания
-                            </Typography>
-                        </Grid>
-                    </IconButton>
+                    <AppToolbarButton icon={CallMadeIcon} text={"Примечания"} onClick={handleClickOpenNotes}/>
 
                     <Menu
                         id="notesMenu"
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleClose}
-                        MenuListProps={{'aria-labelledby': 'notesButton'}}
+                        anchorEl={anchorElNotes}
+                        open={openNotes}
+                        onClose={handleCloseNotes}
+                        // MenuListProps={{'aria-labelledby': 'notesButton'}}
                         sx={{m: 0, p: 0}}
                     >
                         <MenuItem>Добавить нового пациента</MenuItem>
@@ -103,48 +74,26 @@ const AppToolbar = () => {
                         <MenuItem>Вычислить расстояния между точками комиссур</MenuItem>
                         <MenuItem>Показать срез</MenuItem>
                         <MenuItem>Показать только аорту</MenuItem>
-                        <MenuItem>Линия пришивания</MenuItem>
+                        <NestedMenuItem
+                            label={"Линия пришивания"}
+                            parentMenuOpen={openNotes}
+                            sx={{px:1}}
+                        >
+                            <MenuItem onClick={() => {handleCloseNotes()}}>Добавить линию пришивания</MenuItem>
+                            <MenuItem onClick={() => {handleCloseNotes()}}>Удалить все линии пришивания</MenuItem>
+                        </NestedMenuItem>
+
                         <MenuItem>Метаданные</MenuItem>
 
                     </Menu>
 
+                    <AppToolbarButton icon={InfoIcon} text={"Инфо"}/>
 
+                    <AppToolbarButton icon={TuneIcon} text={"Pick Points"}/>
 
-                    <IconButton color="inherit" sx={buttonSx}>
-                        <Grid container direction="column" alignItems="center">
-                            <InfoIcon sx={iconSx}/>
-                            <Typography variant="caption" sx={textSx}>
-                                Инфо
-                            </Typography>
-                        </Grid>
-                    </IconButton>
+                    <AppToolbarButton icon={HelpIcon} text={"Помощь"}/>
 
-                    <IconButton color="inherit" sx={buttonSx}>
-                        <Grid container direction="column" alignItems="center">
-                            <TuneIcon sx={iconSx}/>
-                            <Typography variant="caption" sx={textSx}>
-                                Pick Points
-                            </Typography>
-                        </Grid>
-                    </IconButton>
-
-                    <IconButton color="inherit" sx={buttonSx}>
-                        <Grid container direction="column" alignItems="center">
-                            <HelpIcon sx={iconSx}/>
-                            <Typography variant="caption" sx={textSx}>
-                                Помощь
-                            </Typography>
-                        </Grid>
-                    </IconButton>
-
-                    <IconButton edge="end" color="inherit" sx={buttonSx}>
-                        <Grid container direction="column" alignItems="center">
-                            <LogoutIcon sx={iconSx}/>
-                            <Typography variant="caption" sx={textSx}>
-                                Выход
-                            </Typography>
-                        </Grid>
-                    </IconButton>
+                    <AppToolbarButton icon={LogoutIcon} text={"Выход"}/>
 
                 </Toolbar>
             </AppBar>

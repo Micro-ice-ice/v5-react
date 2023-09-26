@@ -4,13 +4,12 @@ import Splitter from "./components/Splitter.tsx";
 function App() {
 
 
-  return (
-    <div>
-      <AppToolbar/>
-
-      <Splitter/>
-    </div>
-  )
+    return (
+        <div>
+            <AppToolbar/>
+            <Splitter/>
+        </div>
+    )
 }
 
 export default App

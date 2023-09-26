@@ -9,18 +9,18 @@ interface AppToolBarButtonProps extends IconButtonProps{
 
 }
 
-const AppToolbarButton: React.FC<AppToolBarButtonProps> = ({icon, text}) => {
+const AppToolbarButton: React.FC<AppToolBarButtonProps> = (props) => {
 
     const buttonSx = {m: 0.5, p: 0, width: '4rem'};
     const textSx = {fontSize: '0.65rem', whiteSpace: 'nowrap', textAlign: 'center'};
     const iconSx = {fontSize: '1.75rem'}
 
     return (
-        <IconButton color="inherit" sx={{...buttonSx, "& .MuiSvgIcon-root": iconSx}}>
+        <IconButton edge={props.edge} color="inherit" sx={{...buttonSx, "& .MuiSvgIcon-root": iconSx}} onClick={props.onClick}>
             <Grid container direction="column" alignItems="center">
-                <SvgIcon component={icon}/>
+                <SvgIcon component={props.icon}/>
                 <Typography variant="caption" sx={textSx}>
-                    {text}
+                    {props.text}
                 </Typography>
             </Grid>
         </IconButton>
