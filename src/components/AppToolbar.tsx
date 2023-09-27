@@ -10,7 +10,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import TuneIcon from '@mui/icons-material/Tune';
 import HelpIcon from '@mui/icons-material/Help';
 import LogoutIcon from '@mui/icons-material/Logout';
-import React, {useState} from "react";
+import React, {useRef, useState} from "react";
 import AppToolbarButton from "./AppToolbarButton.tsx";
 import {NestedMenuItem} from "mui-nested-menu";
 
@@ -30,15 +30,8 @@ const AppToolbar = () => {
     const handleClickOpenNotes = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorElNotes(event.currentTarget);
     const handleCloseNotes = () => setAnchorElNotes(null);
 
-    const [anchorElSewLine, setAnchorElSewLine] = useState<null | HTMLElement>(null);
-    const openSewLine = Boolean(anchorElSewLine);
-    const handleMoveSewLine = (event: React.MouseEvent<HTMLElement>) => setAnchorElSewLine(event.currentTarget);
-
-    const handleCloseSewLine = () => {
-
-        console.log('close Sew Line');
-        setAnchorElSewLine(null);
-    };
+    const patientInputRef = useRef<HTMLInputElement>(null);
+    const handleClickInputPatient = () => patientInputRef.current?.click();
 
     return (
         <ThemeProvider theme={theme}>
@@ -69,7 +62,14 @@ const AppToolbar = () => {
                         // MenuListProps={{'aria-labelledby': 'notesButton'}}
                         sx={{m: 0, p: 0}}
                     >
-                        <MenuItem>Добавить нового пациента</MenuItem>
+                        <MenuItem onClick={handleClickInputPatient}>
+                            Добавить нового пациента
+                            <input
+                                type="file"
+                                hidden
+                                ref={patientInputRef}
+                            />
+                        </MenuItem>
                         <MenuItem>Установить референтные точки комиссур</MenuItem>
                         <MenuItem>Вычислить расстояния между точками комиссур</MenuItem>
                         <MenuItem>Показать срез</MenuItem>
