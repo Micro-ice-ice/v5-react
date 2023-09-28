@@ -32,6 +32,11 @@ const AppToolbar = () => {
 
     const patientInputRef = useRef<HTMLInputElement>(null);
     const handleClickInputPatient = () => patientInputRef.current?.click();
+    const handlePatientUpload = () => {
+
+        const files = patientInputRef.current?.files;
+        console.log(files); // список выбранных файлов
+    }
 
     return (
         <ThemeProvider theme={theme}>
@@ -67,7 +72,11 @@ const AppToolbar = () => {
                             <input
                                 type="file"
                                 hidden
+                                multiple
+                                accept=".DCM"
+
                                 ref={patientInputRef}
+                                onChange={handlePatientUpload}
                             />
                         </MenuItem>
                         <MenuItem>Установить референтные точки комиссур</MenuItem>
