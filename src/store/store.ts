@@ -1,9 +1,18 @@
 import {configureStore} from "@reduxjs/toolkit";
+import patientsReducer from './reducers/patientsSlice.ts'
+
 
 const store =  configureStore({
 
     reducer: {
+
+        patients: patientsReducer
     },
+    middleware: (getDefaultMiddleware) => {
+        return getDefaultMiddleware({
+            serializableCheck: false
+        });
+    }
 })
 
 export default store;

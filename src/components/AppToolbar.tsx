@@ -15,6 +15,8 @@ import AppToolbarButton from "./AppToolbarButton.tsx";
 import {NestedMenuItem} from "mui-nested-menu";
 import {VolumeLoader} from 'ami.js'
 import DICOMLoader from "../helpers/DICOM/DICOMLoader.ts";
+import {useAppDispatch, useAppSelector} from "../hooks/redux.ts";
+import {patientSlice} from "../store/reducers/patientsSlice.ts";
 
 const AppToolbar = () => {
 
@@ -34,6 +36,11 @@ const AppToolbar = () => {
 
     const patientInputRef = useRef<HTMLInputElement>(null);
     const handleClickInputPatient = () => patientInputRef.current?.click();
+
+    const patients = useAppSelector(state => state.patients);
+    const {addPatient} = patientSlice.actions;
+    const dispatch = useAppDispatch();
+
     const handlePatientUpload = () => {
 
         const files = patientInputRef.current?.files;
@@ -43,8 +50,10 @@ const AppToolbar = () => {
 
             DICOMLoader.loadSeries(files)
                 .then((model) => {
+
+                    dispatch(addPatient(model))
                     console.log(model.patientName);
-                    model.stack[0];
+
                 })
                 .catch((err) => {
                     console.error(err);
