@@ -13,6 +13,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import React, {useRef, useState} from "react";
 import AppToolbarButton from "./AppToolbarButton.tsx";
 import {NestedMenuItem} from "mui-nested-menu";
+import {VolumeLoader} from 'ami.js'
+import DICOMLoader from "../helpers/DICOM/DICOMLoader.ts";
 
 const AppToolbar = () => {
 
@@ -36,6 +38,19 @@ const AppToolbar = () => {
 
         const files = patientInputRef.current?.files;
         console.log(files); // список выбранных файлов
+
+        if (files){
+
+            DICOMLoader.loadSeries(files)
+                .then((model) => {
+                    console.log(model.patientName);
+                    model.stack[0];
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+
+        }
     }
 
     return (
@@ -73,8 +88,6 @@ const AppToolbar = () => {
                                 type="file"
                                 hidden
                                 multiple
-                                accept=".DCM"
-
                                 ref={patientInputRef}
                                 onChange={handlePatientUpload}
                             />

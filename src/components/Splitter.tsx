@@ -17,7 +17,7 @@ const Splitter = () => {
     return (
         <Grid container spacing={0} sx={gridSx}>
             <Grid item xs={6} sx={itemSX}>
-                <Canvas>
+                <Canvas id="mainCanvas" >
                     <ThreeCanvas/>
                 </Canvas>
             </Grid>
