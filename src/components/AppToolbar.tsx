@@ -13,10 +13,9 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import React, {useRef, useState} from "react";
 import AppToolbarButton from "./AppToolbarButton.tsx";
 import {NestedMenuItem} from "mui-nested-menu";
-import {VolumeLoader} from 'ami.js'
-import DICOMLoader from "../helpers/DICOM/DICOMLoader.ts";
 import {useAppDispatch, useAppSelector} from "../hooks/redux.ts";
 import {patientSlice} from "../store/reducers/patientsSlice.ts";
+import {db} from "../db/db.ts";
 
 const AppToolbar = () => {
 
@@ -41,25 +40,40 @@ const AppToolbar = () => {
     const {addPatient} = patientSlice.actions;
     const dispatch = useAppDispatch();
 
-    const handlePatientUpload = () => {
+
+
+    const handlePatientUpload = async () => {
 
         const files = patientInputRef.current?.files;
         console.log(files); // список выбранных файлов
+        const patientId = '0';
 
         if (files){
 
-            DICOMLoader.loadSeries(files)
-                .then((model) => {
+            const existingPatient = await db.patients.where('id').equals(patientId).first();
 
-                    dispatch(addPatient(model))
-                    console.log(model.patientName);
+            if (existingPatient){
+                console.log('A copy of the patient was found, delete it to add the files again.')
+            }
+            else {
+                try
+                {
 
-                })
-                .catch((err) => {
-                    console.error(err);
-                });
+                    db.patients.add({
+                        id: patientId,
+                        dicomFiles: files
+                    })
+                }
+                catch (error){
+
+                    console.log(`Failed to add patient: ${error}`)
+                }
+            }
 
         }
+
+        handleCloseNotes()
+
     }
 
     return (

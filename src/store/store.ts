@@ -8,11 +8,11 @@ const store =  configureStore({
 
         patients: patientsReducer
     },
-    middleware: (getDefaultMiddleware) => {
-        return getDefaultMiddleware({
-            serializableCheck: false
-        });
-    }
+    // middleware: (getDefaultMiddleware) => {
+    //     return getDefaultMiddleware({
+    //         serializableCheck: false
+    //     });
+    // }
 })
 
 export default store;

@@ -1,7 +1,4 @@
 import { Grid} from "@mui/material";
-import {Canvas} from "@react-three/fiber";
-import ThreeCanvas from "./ThreeCanvas.tsx";
-
 
 const Splitter = () => {
 
@@ -17,24 +14,16 @@ const Splitter = () => {
     return (
         <Grid container spacing={0} sx={gridSx}>
             <Grid item xs={6} sx={itemSX}>
-                <Canvas id="mainCanvas" >
-                    <ThreeCanvas/>
-                </Canvas>
+                Element 1
             </Grid>
             <Grid item xs={6} sx={itemSX}>
-                <Canvas>
-                    <ThreeCanvas/>
-                </Canvas>
+                Element 2
             </Grid>
             <Grid item xs={6} sx={itemSX}>
-                <Canvas>
-                    <ThreeCanvas/>
-                </Canvas>
+                Element 3
             </Grid>
             <Grid item xs={6} sx={itemSX}>
-                <Canvas>
-                    <ThreeCanvas/>
-                </Canvas>
+                Element 4
             </Grid>
         </Grid>
     );
