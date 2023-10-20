@@ -1,13 +1,13 @@
 import {SeriesModel} from "ami.js";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-interface PatientsState {
+interface currentPatientState {
 
     patients: SeriesModel[],
     currentPatient: SeriesModel | null
 }
 
-const initialState: PatientsState = {
+const initialState: currentPatientState = {
 
     patients: [],
     currentPatient: null

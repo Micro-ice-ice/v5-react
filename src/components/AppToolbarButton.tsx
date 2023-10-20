@@ -2,7 +2,7 @@ import {Grid, IconButton, IconButtonProps, SvgIcon, SvgIconTypeMap, Typography} 
 import React from "react";
 import {OverridableComponent} from "@mui/material/OverridableComponent";
 
-interface AppToolBarButtonProps extends IconButtonProps{
+interface AppToolBarButtonProps extends IconButtonProps {
 
     icon: OverridableComponent<SvgIconTypeMap> & { muiName: string; },
     text: string
@@ -16,7 +16,8 @@ const AppToolbarButton: React.FC<AppToolBarButtonProps> = (props) => {
     const iconSx = {fontSize: '1.75rem'}
 
     return (
-        <IconButton edge={props.edge} color="inherit" sx={{...buttonSx, "& .MuiSvgIcon-root": iconSx}} onClick={props.onClick}>
+        <IconButton edge={props.edge} color="inherit" sx={{...buttonSx, "& .MuiSvgIcon-root": iconSx}}
+                    onClick={props.onClick}>
             <Grid container direction="column" alignItems="center">
                 <SvgIcon component={props.icon}/>
                 <Typography variant="caption" sx={textSx}>

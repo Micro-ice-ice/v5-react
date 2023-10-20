@@ -1,5 +1,4 @@
 import {AppBar, createTheme, Menu, MenuItem, ThemeProvider, Toolbar, Typography} from "@mui/material";
-
 import LayersIcon from '@mui/icons-material/Layers';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import OpenWithIcon from '@mui/icons-material/OpenWith';
@@ -13,9 +12,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import React, {useRef, useState} from "react";
 import AppToolbarButton from "./AppToolbarButton.tsx";
 import {NestedMenuItem} from "mui-nested-menu";
-import {useAppDispatch, useAppSelector} from "../hooks/redux.ts";
-import {patientSlice} from "../store/reducers/patientsSlice.ts";
 import {db} from "../db/db.ts";
+import DICOMLoader from "../helpers/DICOM/DICOMLoader.ts";
 
 const AppToolbar = () => {
 
@@ -36,40 +34,29 @@ const AppToolbar = () => {
     const patientInputRef = useRef<HTMLInputElement>(null);
     const handleClickInputPatient = () => patientInputRef.current?.click();
 
-    const patients = useAppSelector(state => state.patients);
-    const {addPatient} = patientSlice.actions;
-    const dispatch = useAppDispatch();
-
-
-
     const handlePatientUpload = async () => {
 
         const files = patientInputRef.current?.files;
-        console.log(files); // список выбранных файлов
-        const patientId = '0';
 
         if (files){
 
-            const existingPatient = await db.patients.where('id').equals(patientId).first();
+            DICOMLoader.loadSeries(files)
+                .then((model) => {
 
-            if (existingPatient){
-                console.log('A copy of the patient was found, delete it to add the files again.')
-            }
-            else {
-                try
-                {
+                    const patientName = model.patientName;
+                    const patientId = model.patientID;
+                    const patientAge = model.patientAge;
 
-                    db.patients.add({
+                    db.patients.put({
                         id: patientId,
+                        name: patientName,
+                        age: patientAge,
                         dicomFiles: files
                     })
-                }
-                catch (error){
-
-                    console.log(`Failed to add patient: ${error}`)
-                }
-            }
-
+                })
+                .catch((error) => {
+                    console.error(error)
+                })
         }
 
         handleCloseNotes()

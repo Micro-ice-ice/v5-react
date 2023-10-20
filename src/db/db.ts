@@ -1,20 +1,20 @@
 import Dexie, {Table} from "dexie";
+import Patient from "../models/Patient.ts";
 
-export interface Patient {
+export interface PatientDb extends Patient{
 
-    id: string
     dicomFiles: FileList
 }
 
 export class SubDexie extends Dexie {
     // 'friends' is added by dexie when declaring the stores()
     // We just tell the typing system this is the case
-    patients!: Table<Patient>;
+    patients!: Table<PatientDb>;
 
     constructor() {
         super('Patients');
         this.version(1).stores({
-            patients: 'id, dicomFiles' // Primary key and indexed props
+            patients: 'id, age, name, dicomFiles' // Primary key and indexed props
         });
     }
 }

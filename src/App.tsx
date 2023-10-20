@@ -1,13 +1,20 @@
 import './App.css'
 import AppToolbar from "./components/AppToolbar.tsx";
-import Splitter from "./components/Splitter.tsx";
+import QuadView from "./components/QuadView.tsx";
+import PatientCardList from "./components/PatientCardList.tsx";
+import {Stack} from "@mui/material";
+
 
 function App() {
 
     return (
         <>
             <AppToolbar/>
-            <Splitter/>
+
+            <Stack direction="row">
+                <QuadView/>
+                <PatientCardList/>
+            </Stack>
         </>
     )
 }

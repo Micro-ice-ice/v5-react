@@ -1,12 +1,12 @@
 import { Grid} from "@mui/material";
 
-const Splitter = () => {
+const QuadView = () => {
 
     const gridSx = {
         m: 0,
         p: 0,
         height: '100%',
-        width: '90%',
+        width: '85%',
     };
 
     const itemSX = {m: 0, p: 0.25, height: '21.25rem', border: 1};
@@ -29,4 +29,4 @@ const Splitter = () => {
     );
 };
 
-export default Splitter;
+export default QuadView;
