@@ -22,7 +22,7 @@ const PatientCardList = () => {
 
     return (
         <>
-            <Stack direction="column" sx={{width:'15%'}}>
+            <Stack direction="column" sx={{width:'20%', minWidth: '14rem',}}>
                 {patients ?
                     patients.map((patient) => {
                         return(

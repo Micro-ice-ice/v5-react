@@ -8,14 +8,14 @@ import {Stack} from "@mui/material";
 function App() {
 
     return (
-        <>
+        <div style={{height: '100vh'}}>
             <AppToolbar/>
 
-            <Stack direction="row">
+            <Stack direction="row" height="100%">
                 <QuadView/>
                 <PatientCardList/>
             </Stack>
-        </>
+        </div>
     )
 }
 
