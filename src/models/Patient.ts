@@ -1,8 +1,7 @@
 interface Patient {
-
-    id: string,
-    name: string,
-    age: string,
+    id: string;
+    name: string;
+    age: string;
 }
 
-export default Patient
+export default Patient;

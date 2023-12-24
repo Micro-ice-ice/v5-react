@@ -1,12 +1,7 @@
-import * as THREE from 'three'
+import * as THREE from 'three';
 
 const ThreeCanvas = () => {
-
-    return (
-        <>
-
-        </>
-    );
+    return <></>;
 };
 
 export default ThreeCanvas;

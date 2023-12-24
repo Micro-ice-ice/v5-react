@@ -18,14 +18,14 @@ export default class FileVolumeLoader extends VolumeLoader {
     }
 
     public async fetch(url: any): Promise<any> {
-        return await new Promise(resolve => {
+        return await new Promise((resolve) => {
             const fileReader = new FileReader();
 
             fileReader.onload = () => {
                 const buffer = fileReader.result;
                 const response = {
                     url,
-                    buffer
+                    buffer,
                 };
                 resolve(response);
             };
@@ -48,13 +48,9 @@ export default class FileVolumeLoader extends VolumeLoader {
         const loadSequences: Array<Promise<any> | Array<Promise<any>>> = [];
         arrFiles.forEach((file: File | File[]) => {
             if (!Array.isArray(file)) {
-                loadSequences.push(
-                    this.loadSequence(file, requests)
-                );
+                loadSequences.push(this.loadSequence(file, requests));
             } else {
-                loadSequences.push(
-                    this.loadSequenceGroup(file, requests)
-                );
+                loadSequences.push(this.loadSequenceGroup(file, requests));
             }
         });
 

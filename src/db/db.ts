@@ -1,9 +1,8 @@
-import Dexie, {Table} from "dexie";
-import Patient from "../models/Patient.ts";
+import Dexie, { Table } from 'dexie';
+import Patient from '../models/Patient.ts';
 
-export interface PatientDb extends Patient{
-
-    dicomFiles: FileList
+export interface PatientDb extends Patient {
+    dicomFiles: FileList;
 }
 
 export class SubDexie extends Dexie {
@@ -14,7 +13,7 @@ export class SubDexie extends Dexie {
     constructor() {
         super('Patients');
         this.version(1).stores({
-            patients: 'id, age, name, dicomFiles' // Primary key and indexed props
+            patients: 'id, age, name, dicomFiles', // Primary key and indexed props
         });
     }
 }

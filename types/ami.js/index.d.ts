@@ -8,7 +8,7 @@
 declare module 'ami.js' {
     import type * as THREE from 'three';
     import { Camera, type Matrix4, Object3D, type Vector3 } from 'three';
-    //import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
+    import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
 
     export class SeriesModel {
         seriesInstanceUID: string;
@@ -112,11 +112,18 @@ declare module 'ami.js' {
     }
 
     export class OrthographicCamera extends Camera {
-        constructor(left: number, right: number, top: number, bottom: number, near: number, far: number);
+        constructor(
+            left: number,
+            right: number,
+            top: number,
+            bottom: number,
+            near: number,
+            far: number
+        );
 
         controls: any;
-        box: { center: THREE.Vector3, halfDimensions: THREE.Vector3 };
-        canvas: { width: number, height: number };
+        box: { center: THREE.Vector3; halfDimensions: THREE.Vector3 };
+        canvas: { width: number; height: number };
         orientation: string;
         stackOrientation: number;
 
@@ -125,8 +132,8 @@ declare module 'ami.js' {
         directions: number[3];
     }
 
-    export class TrackballControll {
-        constructor(camera: OrthographicCamera, element: HTMLElement);
+    export class TrackballControl {
+        constructor(camera: Camera, element: HTMLElement);
         staticMoving: boolean;
         noRotate: boolean;
         target: Vector3;
@@ -137,12 +144,11 @@ declare module 'ami.js' {
         update: () => void;
     }
 
-    export class TrackballOrthoControl extends TrackballControll {
-    }
+    export class TrackballOrthoControl extends TrackballControl {}
 
     /* Factory Section */
     function orthographicCameraFactory(three: THREE): OrthographicCamera.prototype;
     function stackHelperFactory(three: THREE): StackHelper.prototype;
     function trackballOrthoControlFactory(three: THREE): TrackballOrthoControl.prototype;
-    function trackballControlFactory(three: THREE): TrackballControll.prototype;
+    function trackballControlFactory(three: THREE): TrackballControl.prototype;
 }
