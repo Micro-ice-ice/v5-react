@@ -19,6 +19,7 @@
         "@types/react-redux": "^7.1.27",
         "ami.js": "^0.33.0",
         "axios": "^1.5.1",
+        "dat.gui": "^0.7.9",
         "dexie": "^3.2.4",
         "dexie-react-hooks": "^1.1.6",
         "mui-nested-menu": "^3.2.2",

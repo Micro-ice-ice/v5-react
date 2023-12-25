@@ -7,8 +7,9 @@
  */
 declare module 'ami.js' {
     import type * as THREE from 'three';
-    import { Camera, type Matrix4, Object3D, type Vector3 } from 'three';
+    import { Camera, type Matrix4, Object3D, type Vector3, Vector4 } from 'three';
     import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
+    import { Geometry } from 'three/examples/jsm/deprecated/Geometry';
 
     export class SeriesModel {
         seriesInstanceUID: string;
@@ -36,7 +37,7 @@ declare module 'ami.js' {
 
         index: number;
 
-        bbox: HelpersBoundingBox;
+        bbox: BoundingBoxHelper;
         slice: HelpersSlice;
         border: HelpersSlice;
 
@@ -51,12 +52,23 @@ declare module 'ami.js' {
         borderColor: number;
     }
 
-    export class HelpersSlice {
+    export class LocalizerHelper {
+        constructor(stack: Stack, geometry: Geometry, plane: Vector4);
+
         canvasWidth: number;
         canvasHeight: number;
     }
 
-    export class HelpersBoundingBox {
+    export class HelpersSlice {
+        canvasWidth: number;
+        canvasHeight: number;
+        cartesianEquation(): THREE.Vector4;
+        geometry: Geometry;
+    }
+
+    export class BoundingBoxHelper extends Object3D {
+        constructor(stack: Stack);
+
         visible: boolean;
     }
 
@@ -65,8 +77,10 @@ declare module 'ami.js' {
     }
 
     export class VolumeLoader {
+        load: (files: string[]) => Promise;
         loadSequence: (file: File, requests: Map<any, any>) => Promise;
         loadSequenceGroup: (files: File[], requests: Map<any, any>) => Promise[];
+        free: () => void;
         data: ModelsSeries[];
     }
 

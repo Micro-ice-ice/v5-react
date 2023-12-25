@@ -48,16 +48,18 @@ const AppToolbar = () => {
         if (files) {
             DICOMLoader.loadSeries(files)
                 .then((model) => {
-                    const patientName = model.patientName;
-                    const patientId = model.patientID;
-                    const patientAge = model.patientAge;
-
                     db.patients.put({
-                        id: patientId,
-                        name: patientName,
-                        age: patientAge,
-                        dicomFiles: files,
+                        id: model.patientID,
+                        name: model.patientName,
+                        age: model.patientAge,
                     });
+
+                    db.patientsData.put({
+                        id: model.patientID,
+                        files: files,
+                    });
+
+                    console.log('Added patient ' + model.patientName);
                 })
                 .catch((error) => {
                     console.error(error);
@@ -97,8 +99,7 @@ const AppToolbar = () => {
                         open={openNotes}
                         onClose={handleCloseNotes}
                         // MenuListProps={{'aria-labelledby': 'notesButton'}}
-                        sx={{ m: 0, p: 0 }}
-                    >
+                        sx={{ m: 0, p: 0 }}>
                         <MenuItem onClick={handleClickInputPatient}>
                             Добавить нового пациента
                             <input
@@ -116,20 +117,17 @@ const AppToolbar = () => {
                         <NestedMenuItem
                             label={'Линия пришивания'}
                             parentMenuOpen={openNotes}
-                            sx={{ px: 1 }}
-                        >
+                            sx={{ px: 1 }}>
                             <MenuItem
                                 onClick={() => {
                                     handleCloseNotes();
-                                }}
-                            >
+                                }}>
                                 Добавить линию пришивания
                             </MenuItem>
                             <MenuItem
                                 onClick={() => {
                                     handleCloseNotes();
-                                }}
-                            >
+                                }}>
                                 Удалить все линии пришивания
                             </MenuItem>
                         </NestedMenuItem>

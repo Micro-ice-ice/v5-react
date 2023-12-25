@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import patientsReducer from './reducers/currentPatient.ts';
+import currentPatientReducer from './reducers/currentPatient.ts';
 
 const store = configureStore({
     reducer: {
-        patients: patientsReducer,
+        currentPatient: currentPatientReducer,
     },
     // middleware: (getDefaultMiddleware) => {
     //     return getDefaultMiddleware({

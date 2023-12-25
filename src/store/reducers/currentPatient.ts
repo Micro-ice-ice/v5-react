@@ -1,24 +1,22 @@
-import { SeriesModel } from 'ami.js';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import Patient from '../../models/Patient.ts';
 
 interface currentPatientState {
-    patients: SeriesModel[];
-    currentPatient: SeriesModel | null;
+    patient?: Patient;
 }
 
 const initialState: currentPatientState = {
-    patients: [],
-    currentPatient: null,
+    patient: undefined,
 };
 
-export const patientSlice = createSlice({
+export const currentPatientSlice = createSlice({
     name: 'patients',
     initialState,
     reducers: {
-        addPatient(state, action: PayloadAction<SeriesModel>) {
-            state.patients.push(action.payload);
+        selectPatient(state, action: PayloadAction<Patient>) {
+            state.patient = action.payload;
         },
     },
 });
 
-export default patientSlice.reducer;
+export default currentPatientSlice.reducer;
