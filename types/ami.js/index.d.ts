@@ -707,7 +707,60 @@ declare module 'ami.js' {
         dispose(): void;
     }
 
-    export class TrackballOrthoControl extends TrackballControl {}
+    export class TrackballOrthoControl extends THREE.EventDispatcher {
+        constructor(camera: Camera, element: HTMLElement);
+
+        //API
+        enabled = true;
+
+        screen = { left: 0, top: 0, width: 0, height: 0 };
+
+        radius: number;
+
+        zoomSpeed: number;
+
+        noZoom: boolean;
+        noPan: boolean;
+
+        staticMoving: boolean;
+        dynamicDampingFactor: number;
+
+        minDistance: number;
+        maxDistance: number;
+
+        keys: number[] | [number, number, number];
+
+        target = Vector3;
+
+        target0: Vector3;
+        position0: Vector3;
+        up0: Vector3;
+        left0: number;
+        right0: number;
+        top0: number;
+        bottom0: number;
+
+        handleResize(): void;
+        handleEvent(event: any): void;
+        zoomCamera(): void;
+        panCamera: () => void;
+        update(): void;
+        reset(): void;
+        setState(targetState: number): void;
+        custom(customStart: any, customEnd: any): void;
+
+        keydown(event: any): void;
+        keyup(event: any): void;
+        mousedown(event: any): void;
+        mousemove(event: any): void;
+        mouseup(event: any): void;
+        mousewheel(event: any): void;
+        touchstart(event: any): void;
+        touchmove(event): void;
+        touchend(event): void;
+        contextmenu(event): void;
+        dispose(): void;
+    }
 
     /* Factory Section */
     function orthographicCameraFactory(three: THREE): OrthographicCamera.prototype;
