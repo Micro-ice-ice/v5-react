@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import * as THREE from 'three';
 import * as AMI from 'ami.js';
 import { useEffect, useRef, useState } from 'react';
-import Renderer3D from '../models/Renderer3D.ts';
+import RendererObj3D from '../models/RendererObj3D.ts';
 import RendererObj2D from '../models/RendererObj2D.ts';
 import { Vector4 } from 'three';
 import { useAppSelector } from '../hooks/redux.ts';
@@ -11,7 +11,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../db/db.ts';
 import DICOMLoader from '../helpers/DICOM/DICOMLoader.ts';
 
-const r0: Renderer3D = {};
+const r0: RendererObj3D = {};
 const r1: RendererObj2D = {
     color: 0x121212,
     sliceOrientation: 'axial',
@@ -52,7 +52,11 @@ const QuadView = () => {
     const refR2 = useRef<HTMLElement>(null);
     const refR3 = useRef<HTMLElement>(null);
 
-    const InitRenderer3D = (rendererObj: Renderer3D, element: HTMLElement, color: THREE.Color) => {
+    const InitRenderer3D = (
+        rendererObj: RendererObj3D,
+        element: HTMLElement,
+        color: THREE.Color
+    ) => {
         rendererObj.domElement = element;
         rendererObj.renderer = new THREE.WebGLRenderer({
             antialias: true,
@@ -79,7 +83,7 @@ const QuadView = () => {
 
         // controls
         rendererObj.controls = new AMI.TrackballControl(rendererObj.camera, rendererObj.domElement);
-        rendererObj.controls.rotateSpeed = 5.5;
+        rendererObj.controls.rotateSpeed = 10.5;
         rendererObj.controls.zoomSpeed = 1.2;
         rendererObj.controls.panSpeed = 0.8;
         rendererObj.controls.staticMoving = true;
@@ -273,7 +277,6 @@ const QuadView = () => {
                 .then((series) => {
                     const stack = series.stack[0];
                     stack.prepare();
-
                     // center 3d camera/control on the stack
                     const centerLPS = stack.worldCenter();
                     r0.camera!.lookAt(centerLPS.x, centerLPS.y, centerLPS.z);
@@ -348,7 +351,7 @@ const QuadView = () => {
             <Box component="div" id="r0" sx={rSx} ref={refR0}></Box>
             <Box component="div" id="r1" sx={rSx} ref={refR1}></Box>
             <Box component="div" id="r2" sx={rSx} ref={refR2}></Box>
-            <Box component="div" id="r3" sx={rSx} ref={refR3}></Box>
+            <Box component="div" id="r3" sx={rSx} ref={refR3}></Box>,
         </Box>
     );
 };

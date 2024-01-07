@@ -1,16 +1,16 @@
 import { Camera, Color, Light, Scene, WebGLRenderer } from 'three';
 import { TrackballControl } from 'ami.js';
 
-interface Renderer3D {
+interface RendererObj3D {
     domId?: string;
     domElement?: HTMLElement;
     renderer?: WebGLRenderer;
-    color?: Color;
+    color?: Color | number;
     targetID?: string;
     camera?: Camera;
-    controls?: TrackballControl; //need add types
+    controls?: TrackballControl;
     scene?: Scene;
     light?: Light;
 }
 
-export default Renderer3D;
+export default RendererObj3D;

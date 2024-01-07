@@ -11,8 +11,8 @@ export default class DICOMLoader {
         await loader.load(files);
 
         const series = loader.data[0].mergeSeries(loader.data)[0];
-        const stack = series.stack[0];
-        stack.prepare();
+        // const stack = series.stack[0];
+        // stack.prepare();
         return series;
     }
 }

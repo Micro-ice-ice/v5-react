@@ -1,6 +1,8 @@
-# npm i --force
+# To run
 
-# npm run dev
+# yarn
+
+# yarn run dev
 
 # React + TypeScript + Vite
 

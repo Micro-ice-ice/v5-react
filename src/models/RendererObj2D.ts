@@ -5,7 +5,7 @@ interface RendererObj2D {
     domId?: string;
     domElement?: HTMLElement;
     renderer?: WebGLRenderer;
-    color?: number;
+    color?: Color | number;
     sliceOrientation?: string;
     sliceColor?: number;
     targetID?: string | number;
@@ -14,7 +14,7 @@ interface RendererObj2D {
     scene?: Scene;
     light?: Light;
     stackHelper?: AMI.StackHelper;
-    localizerHelper?: AMI.LocalizerHelper; //need add types
+    localizerHelper?: AMI.LocalizerHelper;
     localizerScene?: any; //need add types
 }
 
