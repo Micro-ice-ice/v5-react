@@ -721,6 +721,7 @@ declare module 'ami.js' {
 
         noZoom: boolean;
         noPan: boolean;
+        noRotate: boolean;
 
         staticMoving: boolean;
         dynamicDampingFactor: number;
