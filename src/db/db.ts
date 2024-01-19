@@ -1,6 +1,6 @@
 import Dexie, { Table } from 'dexie';
 import Patient from '../models/Patient.ts';
-import PatientData from '../models/PatientData.ts';
+import PatientDicomData from '../models/PatientDicomData.ts';
 
 //https://dexie.org/docs/Tutorial/React
 export class SubDexie extends Dexie {
@@ -9,7 +9,7 @@ export class SubDexie extends Dexie {
 
     patients!: Table<Patient>;
 
-    patientsData!: Table<PatientData>;
+    patientsData!: Table<PatientDicomData>;
 
     constructor() {
         super('Patients');

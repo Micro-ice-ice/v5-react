@@ -167,6 +167,8 @@ declare module 'ami.js' {
 
         get borderColor(): number;
         set borderColor(borderColor: number): void;
+
+        dispose(): void;
     }
 
     export class LocalizerHelper extends Object3D {
@@ -647,7 +649,7 @@ declare module 'ami.js' {
         stackOrientation: number;
 
         fitBox(a: number, b: number): void;
-        directions: number[3];
+        directions: [Vector3, Vector3, Vector3];
     }
 
     export class TrackballControl extends THREE.EventDispatcher {
@@ -677,7 +679,7 @@ declare module 'ami.js' {
 
         keys: number[] | [number, number, number];
 
-        target = Vector3;
+        target: Vector3;
 
         target0: Vector3;
         position0: Vector3;
@@ -730,7 +732,7 @@ declare module 'ami.js' {
 
         keys: number[] | [number, number, number];
 
-        target = Vector3;
+        target: Vector3;
 
         target0: Vector3;
         position0: Vector3;

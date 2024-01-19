@@ -1,9 +1,9 @@
 import FileVolumeLoader from './FileVolumeLoader';
 import { type SeriesModel } from 'ami.js';
 
-export default class DICOMLoader {
+export default class DicomLoader {
     static async loadSeries(files: File | FileList): Promise<SeriesModel> {
-        return await DICOMLoader.loadLocalFiles(files);
+        return await DicomLoader.loadLocalFiles(files);
     }
 
     private static async loadLocalFiles(files: File | FileList): Promise<SeriesModel> {

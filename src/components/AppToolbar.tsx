@@ -21,7 +21,7 @@ import React, { useRef, useState } from 'react';
 import AppToolbarButton from './AppToolbarButton.tsx';
 import { NestedMenuItem } from 'mui-nested-menu';
 import { db } from '../db/db.ts';
-import DICOMLoader from '../helpers/DICOM/DICOMLoader.ts';
+import DicomLoader from '../helpers/DICOM/DicomLoader.ts';
 
 const AppToolbar = () => {
     const theme = createTheme({
@@ -46,7 +46,7 @@ const AppToolbar = () => {
         const files = patientInputRef.current?.files;
 
         if (files) {
-            DICOMLoader.loadSeries(files)
+            DicomLoader.loadSeries(files)
                 .then((model) => {
                     db.patients.put({
                         id: model.patientID,
