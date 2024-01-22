@@ -1,15 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import currentPatientReducer from './reducers/currentPatient.ts';
+import helpersStatusReducer from './reducers/helpersStatus.ts';
 
 const store = configureStore({
     reducer: {
         currentPatient: currentPatientReducer,
+        helpersStatus: helpersStatusReducer,
     },
-    // middleware: (getDefaultMiddleware) => {
-    //     return getDefaultMiddleware({
-    //         serializableCheck: false
-    //     });
-    // }
 });
 
 export default store;

@@ -7,6 +7,7 @@ interface Renderer3D {
     controls?: AMI.TrackballControl;
     scene?: THREE.Scene;
     light?: THREE.DirectionalLight;
+    clipScene?: THREE.Scene;
 }
 
 export default Renderer3D;

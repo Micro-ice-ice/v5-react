@@ -1,10 +1,8 @@
-import { createContext, FC, ReactNode, useEffect, useRef } from 'react';
+import { createContext, FC, ReactNode, useContext, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import * as AMI from 'ami.js';
-import Renderer3D from '../models/Renderer3D.ts';
 import useFrame from '../hooks/useFrame.ts';
-
-export const Renderer3DContext = createContext<Renderer3D>({});
+import { RenderersContext } from './QuadViewProvider.tsx';
 
 interface Canvas3DProps {
     children?: ReactNode;
@@ -14,23 +12,23 @@ interface Canvas3DProps {
 
 const Canvas3D: FC<Canvas3DProps> = ({ children, color = 0x212121, targetId }) => {
     const domElementRef = useRef<HTMLDivElement>(null);
-    const rendererRef = useRef<Renderer3D>({});
+    const { r0, r1, r2, r3 } = useContext(RenderersContext);
+    const renderer = r0;
 
     useFrame(() => {
-        rendererRef.current.controls!.update();
+        renderer.controls!.update();
 
-        rendererRef.current.light!.position.copy(rendererRef.current.camera!.position);
-        rendererRef.current.gl!.render(rendererRef.current.scene!, rendererRef.current.camera!);
+        renderer.light!.position.copy(renderer.camera!.position);
+        renderer.gl!.render(renderer.scene!, renderer.camera!);
     });
 
     const handleResize = () => {
         const width = domElementRef.current!.clientWidth;
         const height = domElementRef.current!.clientHeight;
-        const gl = rendererRef.current.gl!;
-        const camera = rendererRef.current.camera!;
+        const gl = renderer.gl!;
+        const camera = renderer.camera!;
 
         gl.setSize(width, height);
-
         // Update camera aspect ratio
         camera.aspect = width / height;
         camera.updateProjectionMatrix();
@@ -67,15 +65,18 @@ const Canvas3D: FC<Canvas3DProps> = ({ children, color = 0x212121, targetId }) =
             const scene = new THREE.Scene();
             // scene.add(new THREE.Mesh(new BoxGeometry(), new MeshBasicMaterial()));
 
+            const clipScene = new THREE.Scene();
+
             const light = new THREE.DirectionalLight(0xffffff, 1);
             scene.add(light);
 
             //add refs
-            rendererRef.current.gl = gl;
-            rendererRef.current.camera = camera;
-            rendererRef.current.controls = controls;
-            rendererRef.current.scene = scene;
-            rendererRef.current.light = light;
+            renderer.gl = gl;
+            renderer.camera = camera;
+            renderer.controls = controls;
+            renderer.scene = scene;
+            renderer.light = light;
+            renderer.clipScene = clipScene;
 
             //resize camera and renderer first time
             handleResize();
@@ -91,23 +92,21 @@ const Canvas3D: FC<Canvas3DProps> = ({ children, color = 0x212121, targetId }) =
     });
 
     return (
-        <Renderer3DContext.Provider value={rendererRef.current}>
-            <div
-                style={{
-                    backgroundColor: '#000',
-                    width: '50%',
-                    maxWidth: '50%',
-                    height: '50%',
-                    boxSizing: 'border-box',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                    borderBottom: 'none',
-                    position: 'relative',
-                    overflow: 'hidden',
-                }}
-                ref={domElementRef}>
-                {children}
-            </div>
-        </Renderer3DContext.Provider>
+        <div
+            style={{
+                backgroundColor: '#000',
+                width: '50%',
+                maxWidth: '50%',
+                height: '50%',
+                boxSizing: 'border-box',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                borderBottom: 'none',
+                position: 'relative',
+                overflow: 'hidden',
+            }}
+            ref={domElementRef}>
+            {children}
+        </div>
     );
 };
 

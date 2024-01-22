@@ -7,6 +7,10 @@ export interface Renderer2D {
     controls?: AMI.TrackballOrthoControl;
     scene?: THREE.Scene;
     domElement?: HTMLDivElement;
+    stackHelper?: AMI.StackHelper;
+    localizerHelper?: AMI.LocalizerHelper;
+    localizerScene?: THREE.Scene;
+    plane?: THREE.Plane;
 }
 
 export default Renderer2D;

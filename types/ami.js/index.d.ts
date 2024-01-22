@@ -203,6 +203,8 @@ declare module 'ami.js' {
 
         get canvasHeight(): number;
         set canvasHeight(canvasHeight): void;
+
+        dispose(): void;
     }
 
     export class helpersMaterialMixin extends Object3D {}
@@ -762,6 +764,10 @@ declare module 'ami.js' {
         touchend(event): void;
         contextmenu(event): void;
         dispose(): void;
+    }
+
+    export class UtilsCore {
+        static worldToData(lps2IJK: Matrix4, worldCoordinates: Vector3): Vector3;
     }
 
     /* Factory Section */

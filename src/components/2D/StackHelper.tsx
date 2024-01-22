@@ -1,23 +1,28 @@
-import { useContext, useEffect, useRef } from 'react';
-import { Renderer2DContext, SliceContext } from '../Canvas2D.tsx';
-import { StackContext, StackHelpersContext } from '../QuadViewProvider.tsx';
+import { useContext, useEffect } from 'react';
+import { SliceContext } from '../Canvas2D.tsx';
+import { RenderersContext, StackContext } from '../QuadViewProvider.tsx';
 import * as AMI from 'ami.js';
 import * as THREE from 'three';
+import { helpersStatusSlice } from '../../store/reducers/helpersStatus.ts';
+import { useAppDispatch } from '../../hooks/redux.ts';
 
 const StackHelper = () => {
-    const renderer = useContext(Renderer2DContext);
     const { sliceColor, sliceOrientation } = useContext(SliceContext);
+
+    const { r0, r1, r2, r3 } = useContext(RenderersContext);
+    const renderer = sliceOrientation === 'axial' ? r1 : sliceOrientation === 'sagittal' ? r2 : r3;
+
     const stack = useContext(StackContext);
 
-    const stackHelpers = useContext(StackHelpersContext);
-    console.log('update cause State change');
+    const { setStackHelpersStatus } = helpersStatusSlice.actions;
+    const dispatch = useAppDispatch();
 
     const handleResizeStackHelperCanvas = () => {
         const domElement = renderer.domElement!;
         const width = domElement.clientWidth;
         const height = domElement.clientHeight;
         const camera = renderer.camera!;
-        const stackHelper = stackHelperRef.current!;
+        const stackHelper = renderer.stackHelper!;
 
         camera!.canvas = {
             width: width,
@@ -30,11 +35,17 @@ const StackHelper = () => {
         stackHelper.slice.canvasHeight = domElement.clientHeight;
     };
 
+    const helpersStatusUpdate = () => {
+        if (r1.stackHelper && r2.stackHelper && r3.stackHelper) {
+            dispatch(setStackHelpersStatus(true));
+        }
+    };
+
     useEffect(() => {
         //Init Helper Stack
         if (stack) {
             const stackHelper = new AMI.StackHelper(stack);
-            stackHelperRef.current = stackHelper;
+            renderer.stackHelper = stackHelper;
 
             stackHelper.bbox.visible = false;
             stackHelper.borderColor = sliceColor;
@@ -61,9 +72,12 @@ const StackHelper = () => {
 
             stackHelper.orientation = renderer.camera!.stackOrientation;
             stackHelper.index = Math.floor(stackHelper.orientationMaxIndex / 2);
-            renderer.camera!.add(stackHelper);
 
+            renderer.camera!.add(stackHelper);
             renderer.scene?.add(stackHelper);
+            r0.scene?.add(renderer.scene!);
+
+            helpersStatusUpdate();
 
             handleResizeStackHelperCanvas();
 
@@ -73,11 +87,15 @@ const StackHelper = () => {
         return () => {
             window.removeEventListener('resize', handleResizeStackHelperCanvas);
             //clear scene (stackHelper)
-            if (renderer.scene && stackHelperRef.current) {
+            if (renderer.scene && renderer.stackHelper) {
                 // renderer.scene.remove(...renderer.scene.children) //this clear all scene
 
-                renderer.scene.remove(stackHelperRef.current);
-                stackHelperRef.current.dispose();
+                renderer.camera!.remove(renderer.stackHelper);
+                renderer.scene.remove(renderer.stackHelper);
+                renderer.stackHelper.dispose();
+                r0.scene?.remove(renderer.stackHelper);
+
+                renderer.stackHelper = undefined;
             }
         };
     });
