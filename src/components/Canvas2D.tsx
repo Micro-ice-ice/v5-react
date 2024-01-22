@@ -2,6 +2,7 @@ import { createContext, FC, ReactNode, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import * as AMI from 'ami.js';
 import Renderer2D from '../models/Renderer2D.ts';
+import useFrame from '../hooks/useFrame.ts';
 
 export const Renderer2DContext = createContext<Renderer2D>({});
 
@@ -29,18 +30,6 @@ const Canvas2D: FC<Canvas2DProps> = ({
     const domElementRef = useRef<HTMLDivElement>(null);
     const rendererRef = useRef<Renderer2D>({});
 
-    const render = () => {
-        rendererRef.current!.controls!.update();
-
-        rendererRef.current!.gl!.clear();
-        rendererRef.current!.gl!.render(rendererRef.current!.scene!, rendererRef.current!.camera!);
-    };
-    const animate = () => {
-        render();
-
-        requestAnimationFrame(() => void animate());
-    };
-
     const handleResize2D = () => {
         const domElement = domElementRef.current!;
         const width = domElement.clientWidth;
@@ -50,6 +39,13 @@ const Canvas2D: FC<Canvas2DProps> = ({
 
         gl.setSize(width, height);
     };
+
+    useFrame(() => {
+        rendererRef.current!.controls?.update();
+
+        rendererRef.current!.gl?.clear();
+        rendererRef.current!.gl?.render(rendererRef.current!.scene!, rendererRef.current!.camera!);
+    });
 
     useEffect(() => {
         if (domElementRef.current) {
@@ -96,8 +92,8 @@ const Canvas2D: FC<Canvas2DProps> = ({
             // Attach resize event listener
             window.addEventListener('resize', handleResize2D, false);
 
-            //animate
-            animate();
+            // //animate
+            // animate();
         }
 
         // Cleanup event listener on unmount

@@ -1,12 +1,21 @@
 // refactor example from https://github.com/3dgraphicsplus/MedicalToolkit/tree/master/examples/viewers_quadview
-import { Stack } from 'ami.js';
-import { createContext, FC, ReactNode, useEffect, useState } from 'react';
+import * as AMI from 'ami.js';
+import { createContext, FC, ReactNode, useEffect, useRef, useState } from 'react';
 import { useAppSelector } from '../hooks/redux.ts';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../db/db.ts';
 import DicomLoader from '../helpers/DICOM/DicomLoader.ts';
+import Renderer2D from '../models/Renderer2D.ts';
 
-export const StackContext = createContext<Stack | null>(null);
+export const StackContext = createContext<AMI.Stack | null>(null);
+
+interface StackHelpers {
+    stackHelperAxial?: AMI.StackHelper;
+    stackHelperSagittal?: AMI.StackHelper;
+    stackHelperCoronal?: AMI.StackHelper;
+}
+
+export const StackHelpersContext = createContext<StackHelpers>({});
 
 const QuadViewProvider: FC<{ children?: ReactNode }> = ({ children }) => {
     const currentPatient = useAppSelector((state) => state.currentPatient.patient);
@@ -17,7 +26,7 @@ const QuadViewProvider: FC<{ children?: ReactNode }> = ({ children }) => {
             .first();
     }, [currentPatient]);
 
-    const [stack, setStack] = useState<Stack | null>(null);
+    const [stack, setStack] = useState<AMI.Stack | null>(null);
 
     useEffect(() => {
         if (currentPatientData) {
@@ -28,8 +37,6 @@ const QuadViewProvider: FC<{ children?: ReactNode }> = ({ children }) => {
                     const loadedStack = series.stack[0];
                     loadedStack.prepare();
                     setStack(loadedStack);
-
-                    console.log(loadedStack);
                 })
                 .catch((error) => {
                     console.error(error);
@@ -37,7 +44,13 @@ const QuadViewProvider: FC<{ children?: ReactNode }> = ({ children }) => {
         }
     }, [currentPatientData]);
 
-    return <StackContext.Provider value={stack}>{children}</StackContext.Provider>;
+    return (
+        <StackContext.Provider value={stack}>
+            <StackHelpersContext.Provider value={stackHelpersRef.current}>
+                {children}
+            </StackHelpersContext.Provider>
+        </StackContext.Provider>
+    );
 };
 
 export default QuadViewProvider;

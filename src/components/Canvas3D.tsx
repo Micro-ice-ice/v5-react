@@ -2,6 +2,7 @@ import { createContext, FC, ReactNode, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import * as AMI from 'ami.js';
 import Renderer3D from '../models/Renderer3D.ts';
+import useFrame from '../hooks/useFrame.ts';
 
 export const Renderer3DContext = createContext<Renderer3D>({});
 
@@ -15,17 +16,12 @@ const Canvas3D: FC<Canvas3DProps> = ({ children, color = 0x212121, targetId }) =
     const domElementRef = useRef<HTMLDivElement>(null);
     const rendererRef = useRef<Renderer3D>({});
 
-    const render = () => {
+    useFrame(() => {
         rendererRef.current.controls!.update();
 
         rendererRef.current.light!.position.copy(rendererRef.current.camera!.position);
         rendererRef.current.gl!.render(rendererRef.current.scene!, rendererRef.current.camera!);
-    };
-    const animate = () => {
-        render();
-
-        requestAnimationFrame(() => animate());
-    };
+    });
 
     const handleResize = () => {
         const width = domElementRef.current!.clientWidth;
@@ -85,15 +81,12 @@ const Canvas3D: FC<Canvas3DProps> = ({ children, color = 0x212121, targetId }) =
             handleResize();
 
             // Attach resize event listener
-            gl.domElement.addEventListener('resize', handleResize);
-
-            //animate
-            animate();
+            window.addEventListener('resize', handleResize, true);
         }
 
         // Cleanup event listener on unmount
         return () => {
-            // window.removeEventListener('resize', handleResize);
+            window.removeEventListener('resize', handleResize);
         };
     });
 
