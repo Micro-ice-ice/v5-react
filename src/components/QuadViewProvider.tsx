@@ -4,7 +4,7 @@ import { createContext, FC, ReactNode, useEffect, useRef, useState } from 'react
 import { useAppDispatch, useAppSelector } from '../hooks/redux.ts';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../db/db.ts';
-import DicomLoader from '../helpers/DICOM/DicomLoader.ts';
+import DicomLoader from '../helpers/Dicom/DicomLoader.ts';
 import Renderer2D from '../models/Renderer2D.ts';
 import Renderer3D from '../models/Renderer3D.ts';
 import { helpersStatusSlice } from '../store/reducers/helpersStatus.ts';

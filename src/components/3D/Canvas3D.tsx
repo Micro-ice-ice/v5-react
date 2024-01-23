@@ -1,8 +1,8 @@
-import { createContext, FC, ReactNode, useContext, useEffect, useRef } from 'react';
+import { FC, ReactNode, useContext, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import * as AMI from 'ami.js';
-import useFrame from '../hooks/useFrame.ts';
-import { RenderersContext } from './QuadViewProvider.tsx';
+import useFrame from '../../hooks/useFrame.ts';
+import { RenderersContext } from '../QuadViewProvider.tsx';
 
 interface Canvas3DProps {
     children?: ReactNode;

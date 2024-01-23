@@ -1,9 +1,9 @@
 import { createContext, FC, ReactNode, useContext, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import * as AMI from 'ami.js';
-import useFrame from '../hooks/useFrame.ts';
-import { RenderersContext } from './QuadViewProvider.tsx';
-import renderer2D, { Renderer2D } from '../models/Renderer2D.ts';
+import useFrame from '../../hooks/useFrame.ts';
+import { RenderersContext } from '../QuadViewProvider.tsx';
+import renderer2D, { Renderer2D } from '../../models/Renderer2D.ts';
 
 interface Slice {
     sliceColor: number;
@@ -68,33 +68,33 @@ const Canvas2D: FC<Canvas2DProps> = ({
         localizerHelper.geometry = stackHelper.slice.geometry;
     };
 
-    const updateClipPlane = (renderer: Renderer2D, clipPlane: THREE.Plane) => {
-        const stackHelper = renderer.stackHelper!;
-        const camera = renderer.camera!;
-        const vertices = stackHelper.slice.geometry.attributes.position.array;
-        const p1 = new THREE.Vector3(vertices[0], vertices[1], vertices[2]).applyMatrix4(
-            stackHelper.stack.ijk2LPS
-        );
-        const p2 = new THREE.Vector3(vertices[3], vertices[4], vertices[5]).applyMatrix4(
-            stackHelper.stack.ijk2LPS
-        );
-        const p3 = new THREE.Vector3(vertices[6], vertices[7], vertices[8]).applyMatrix4(
-            stackHelper.stack.ijk2LPS
-        );
-
-        clipPlane.setFromCoplanarPoints(p1, p2, p3);
-
-        const cameraDirection = new THREE.Vector3(1, 1, 1);
-        cameraDirection.applyQuaternion(camera.quaternion);
-
-        if (cameraDirection.dot(clipPlane.normal) > 0) {
-            clipPlane.negate();
-        }
-    };
+    // const updateClipPlane = (renderer: Renderer2D, clipPlane: THREE.Plane) => {
+    //     const stackHelper = renderer.stackHelper!;
+    //     const camera = renderer.camera!;
+    //     const vertices = stackHelper.slice.geometry.attributes.position.array;
+    //     const p1 = new THREE.Vector3(vertices[0], vertices[1], vertices[2]).applyMatrix4(
+    //         stackHelper.stack.ijk2LPS
+    //     );
+    //     const p2 = new THREE.Vector3(vertices[3], vertices[4], vertices[5]).applyMatrix4(
+    //         stackHelper.stack.ijk2LPS
+    //     );
+    //     const p3 = new THREE.Vector3(vertices[6], vertices[7], vertices[8]).applyMatrix4(
+    //         stackHelper.stack.ijk2LPS
+    //     );
+    //
+    //     clipPlane.setFromCoplanarPoints(p1, p2, p3);
+    //
+    //     const cameraDirection = new THREE.Vector3(1, 1, 1);
+    //     cameraDirection.applyQuaternion(camera.quaternion);
+    //
+    //     if (cameraDirection.dot(clipPlane.normal) > 0) {
+    //         clipPlane.negate();
+    //     }
+    // };
 
     const onDoubleClick = (event: MouseEvent) => {
         const canvas = renderer.domElement!;
-        // Получаем координаты клика относительно окна браузера
+
         const mouse = {
             x: ((event.clientX - canvas.offsetLeft) / canvas.clientWidth) * 2 - 1,
             y: -((event.clientY - canvas.offsetTop) / canvas.clientHeight) * 2 + 1,
@@ -117,13 +117,13 @@ const Canvas2D: FC<Canvas2DProps> = ({
             r3.stackHelper!.index = ijk.getComponent((r3.stackHelper!.orientation + 2) % 3);
 
             updateLocalizer(r3, [r1.localizerHelper!, r2.localizerHelper!]);
-            updateClipPlane(r3, r3.plane!);
+            //updateClipPlane(r3, r3.plane!);
 
             updateLocalizer(r1, [r2.localizerHelper!, r3.localizerHelper!]);
-            updateClipPlane(r1, r1.plane!);
+            //updateClipPlane(r1, r1.plane!);
 
             updateLocalizer(r2, [r1.localizerHelper!, r3.localizerHelper!]);
-            updateClipPlane(r2, r2.plane!);
+            //updateClipPlane(r2, r2.plane!);
         }
     };
 
@@ -186,8 +186,6 @@ const Canvas2D: FC<Canvas2DProps> = ({
             // Attach resize event listener
             window.addEventListener('resize', handleResize, false);
             renderer.domElement.addEventListener('dblclick', onDoubleClick);
-            // //animate
-            // animate();
         }
 
         // Cleanup event listener on unmount

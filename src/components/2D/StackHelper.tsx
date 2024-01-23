@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react';
-import { SliceContext } from '../Canvas2D.tsx';
+import { SliceContext } from './Canvas2D.tsx';
 import { RenderersContext, StackContext } from '../QuadViewProvider.tsx';
 import * as AMI from 'ami.js';
 import * as THREE from 'three';
@@ -35,7 +35,7 @@ const StackHelper = () => {
         stackHelper.slice.canvasHeight = domElement.clientHeight;
     };
 
-    const helpersStatusUpdate = () => {
+    const stackHelpersStatusUpdate = () => {
         if (r1.stackHelper && r2.stackHelper && r3.stackHelper) {
             dispatch(setStackHelpersStatus(true));
         }
@@ -77,7 +77,7 @@ const StackHelper = () => {
             renderer.scene?.add(stackHelper);
             r0.scene?.add(renderer.scene!);
 
-            helpersStatusUpdate();
+            stackHelpersStatusUpdate();
 
             handleResizeStackHelperCanvas();
 
@@ -100,7 +100,7 @@ const StackHelper = () => {
         };
     });
 
-    return <div></div>;
+    return <></>;
 };
 
 export default StackHelper;

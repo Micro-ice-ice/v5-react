@@ -1,6 +1,6 @@
-import { useContext, useEffect, useRef } from 'react';
-import { Renderer2DContext, SliceContext } from '../Canvas2D.tsx';
-import { StackContext, RenderersContext } from '../QuadViewProvider.tsx';
+import { useContext, useEffect } from 'react';
+import { SliceContext } from './Canvas2D.tsx';
+import { RenderersContext, StackContext } from '../QuadViewProvider.tsx';
 import * as AMI from 'ami.js';
 import * as THREE from 'three';
 import useFrame from '../../hooks/useFrame.ts';
@@ -19,22 +19,28 @@ const LocalizerHelper = () => {
 
     const stack = useContext(StackContext);
 
-    const handleResizeLocalizerHelperCanvas = () => {
+    const handleResize = () => {
         const domElement = renderer.domElement!;
         const width = domElement.clientWidth;
         const height = domElement.clientHeight;
         const localizerHelper = renderer.localizerHelper!;
 
-        localizerHelper.canvasWidth = domElement.clientWidth;
-        localizerHelper.canvasHeight = domElement.clientHeight;
+        localizerHelper.canvasWidth = width;
+        localizerHelper.canvasHeight = height;
     };
-    //
+
     useFrame(() => {
         if (renderer.localizerScene) {
             renderer.gl?.clearDepth();
             renderer.gl?.render(renderer.localizerScene!, renderer.camera!);
         }
     });
+
+    const stackHelpersStatusUpdate = () => {
+        if (r1.localizerHelper && r2.localizerHelper && r3.localizerHelper) {
+            dispatch(setLocalizerHelpersStatus(true));
+        }
+    };
 
     useEffect(() => {
         // Init Helper Localizer
@@ -133,14 +139,16 @@ const LocalizerHelper = () => {
             renderer.localizerScene = new THREE.Scene();
             renderer.localizerScene.add(renderer.localizerHelper!);
 
-            handleResizeLocalizerHelperCanvas();
+            stackHelpersStatusUpdate();
 
-            window.addEventListener('resize', handleResizeLocalizerHelperCanvas, true);
+            handleResize();
+
+            window.addEventListener('resize', handleResize, true);
         }
 
         return () => {
-            window.removeEventListener('resize', handleResizeLocalizerHelperCanvas);
-            //clear scene (stackHelper)
+            window.removeEventListener('resize', handleResize);
+
             if (renderer.scene && renderer.localizerHelper) {
                 // renderer.scene.remove(...renderer.scene.children) //this clear all scene
 
@@ -152,7 +160,7 @@ const LocalizerHelper = () => {
         };
     });
 
-    return <div></div>;
+    return <></>;
 };
 
 export default LocalizerHelper;

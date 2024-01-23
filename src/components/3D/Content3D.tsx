@@ -1,8 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import * as AMI from 'ami.js';
-import * as THREE from 'three';
-import { RenderersContext, StackContext } from './QuadViewProvider.tsx';
-import { Renderer3DContext } from './Canvas3D.tsx';
+import { RenderersContext, StackContext } from '../QuadViewProvider.tsx';
 
 const Content3D = () => {
     const { r0, r1, r2, r3 } = useContext(RenderersContext);

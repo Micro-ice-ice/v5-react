@@ -1,8 +1,7 @@
 import QuadViewProvider from './QuadViewProvider.tsx';
-import Canvas3D from './Canvas3D.tsx';
-import Content3D from './Content3D.tsx';
-import Canvas2D from './Canvas2D.tsx';
-import Content2D from './Content2D.tsx';
+import Canvas3D from './3D/Canvas3D.tsx';
+import Content3D from './3D/Content3D.tsx';
+import Canvas2D from './2D/Canvas2D.tsx';
 import StackHelper from './2D/StackHelper.tsx';
 import LocalizerHelper from './2D/LocalizerHelper.tsx';
 

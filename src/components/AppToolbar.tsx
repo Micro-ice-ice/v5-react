@@ -21,7 +21,7 @@ import React, { useRef, useState } from 'react';
 import AppToolbarButton from './AppToolbarButton.tsx';
 import { NestedMenuItem } from 'mui-nested-menu';
 import { db } from '../db/db.ts';
-import DicomLoader from '../helpers/DICOM/DicomLoader.ts';
+import DicomLoader from '../helpers/Dicom/DicomLoader.ts';
 
 const AppToolbar = () => {
     const theme = createTheme({
