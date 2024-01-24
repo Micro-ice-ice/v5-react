@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import * as AMI from 'ami.js';
 import useFrame from '../../hooks/useFrame.ts';
 import { RenderersContext } from '../QuadViewProvider.tsx';
-import renderer2D, { Renderer2D } from '../../models/Renderer2D.ts';
+import renderer2D from '../../models/Renderer2D.ts';
 
 interface Slice {
     sliceColor: number;

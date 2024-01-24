@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import * as AMI from 'ami.js';
 import { RenderersContext, StackContext } from '../QuadViewProvider.tsx';
 
 const Content3D = () => {
-    const { r0, r1, r2, r3 } = useContext(RenderersContext);
+    const { r0 } = useContext(RenderersContext);
     const renderer = r0;
     const stack = useContext(StackContext);
 

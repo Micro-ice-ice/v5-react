@@ -13,7 +13,7 @@ export class SubDexie extends Dexie {
 
     constructor() {
         super('Patients');
-        this.version(1).stores({
+        this.version(2).stores({
             patients: 'id',
             patientsData: 'id',
             // Primary key and indexed props

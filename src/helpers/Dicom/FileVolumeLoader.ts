@@ -3,6 +3,8 @@ import { VolumeLoader } from 'ami.js';
 /**
  * @todo Пока этот класс дублирует старый функционал. Нужно подумать над рефакторигом
  */
+
+// @ts-nocheck
 export default class FileVolumeLoader extends VolumeLoader {
     readonly #dataParser = null;
     constructor() {
@@ -34,13 +36,19 @@ export default class FileVolumeLoader extends VolumeLoader {
         });
     }
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     public async load(url: File | FileList, requests = new Map<any, any>()): Promise<any> {
         // console.log('[OLD APPLICATION] FileVolumeLoader::load()', url);
         const arrFiles = [];
         if (url instanceof File) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
             arrFiles.push(url);
         } else {
             for (let i = 0; i < url.length; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
                 arrFiles.push(url[i]);
             }
         }

@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux.ts';
 import { helpersStatusSlice } from '../../store/reducers/helpersStatus.ts';
 
 const LocalizerHelper = () => {
-    const { sliceColor, sliceOrientation } = useContext(SliceContext);
+    const { sliceOrientation } = useContext(SliceContext);
 
     const { r1, r2, r3 } = useContext(RenderersContext);
     const renderer = sliceOrientation === 'axial' ? r1 : sliceOrientation === 'sagittal' ? r2 : r3;

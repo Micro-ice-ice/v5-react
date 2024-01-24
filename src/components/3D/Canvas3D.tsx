@@ -12,7 +12,7 @@ interface Canvas3DProps {
 
 const Canvas3D: FC<Canvas3DProps> = ({ children, color = 0x212121, targetId }) => {
     const domElementRef = useRef<HTMLDivElement>(null);
-    const { r0, r1, r2, r3 } = useContext(RenderersContext);
+    const { r0 } = useContext(RenderersContext);
     const renderer = r0;
 
     useFrame(() => {
