@@ -1,8 +1,8 @@
 import { useContext, useEffect } from 'react';
 import { SliceContext } from './Canvas2D.tsx';
 import { RenderersContext, StackContext } from '../QuadViewProvider.tsx';
-import * as AMI from 'ami.js';
 import * as THREE from 'three';
+import { localizerHelperFactory } from 'ami.js';
 import useFrame from '../../hooks/useFrame.ts';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux.ts';
 import { helpersStatusSlice } from '../../store/reducers/helpersStatus.ts';
@@ -51,10 +51,12 @@ const LocalizerHelper = () => {
             const stackHelperSagittal = r2.stackHelper!;
             const stackHelperCoronal = r3.stackHelper!;
 
+            const AmiLocalizerHelper = localizerHelperFactory(THREE);
+
             if (sliceOrientation === 'axial') {
                 const stackHelper = stackHelperAxial!;
 
-                const localizerHelper = new AMI.LocalizerHelper(
+                const localizerHelper = new AmiLocalizerHelper(
                     stack,
                     stackHelper.slice.geometry,
                     stackHelper.slice.cartesianEquation()
@@ -81,7 +83,7 @@ const LocalizerHelper = () => {
             if (sliceOrientation === 'sagittal') {
                 const stackHelper = stackHelperSagittal;
 
-                const localizerHelper = new AMI.LocalizerHelper(
+                const localizerHelper = new AmiLocalizerHelper(
                     stack,
                     stackHelper.slice.geometry,
                     stackHelper.slice.cartesianEquation()
@@ -108,7 +110,7 @@ const LocalizerHelper = () => {
             if (sliceOrientation === 'coronal') {
                 const stackHelper = stackHelperCoronal;
 
-                const localizerHelper = new AMI.LocalizerHelper(
+                const localizerHelper = new AmiLocalizerHelper(
                     stack,
                     stackHelper.slice.geometry,
                     stackHelper.slice.cartesianEquation()

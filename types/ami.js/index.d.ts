@@ -771,6 +771,8 @@ declare module 'ami.js' {
     }
 
     /* Factory Section */
+    function boundingBoxHelperFactory(three: THREE): BoundingBoxHelper.prototype;
+    function localizerHelperFactory(three: THREE): LocalizerHelper.prototype;
     function orthographicCameraFactory(three: THREE): OrthographicCamera.prototype;
     function stackHelperFactory(three: THREE): StackHelper.prototype;
     function trackballOrthoControlFactory(three: THREE): TrackballOrthoControl.prototype;

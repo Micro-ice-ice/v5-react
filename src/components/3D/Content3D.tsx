@@ -1,5 +1,6 @@
 import { useContext, useEffect } from 'react';
-import * as AMI from 'ami.js';
+import * as THREE from 'three';
+import { boundingBoxHelperFactory } from 'ami.js';
 import { RenderersContext, StackContext } from '../QuadViewProvider.tsx';
 
 const Content3D = () => {
@@ -15,7 +16,8 @@ const Content3D = () => {
             renderer.camera?.updateMatrix();
             renderer.controls?.target.set(centerLPS.x, centerLPS.y, centerLPS.z);
 
-            const boxHelper = new AMI.BoundingBoxHelper(stack);
+            const AmiBoundingBoxHelper = boundingBoxHelperFactory(THREE);
+            const boxHelper = new AmiBoundingBoxHelper(stack);
             renderer.scene?.add(boxHelper);
         }
 

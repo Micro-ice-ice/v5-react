@@ -1,6 +1,6 @@
 import { createContext, FC, ReactNode, useContext, useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import * as AMI from 'ami.js';
+import { orthographicCameraFactory, trackballOrthoControlFactory, UtilsCore } from 'ami.js';
 import useFrame from '../../hooks/useFrame.ts';
 import { RenderersContext } from '../QuadViewProvider.tsx';
 import renderer2D from '../../models/Renderer2D.ts';
@@ -106,8 +106,7 @@ const Canvas2D: FC<Canvas2DProps> = ({
         const intersects = raycaster.intersectObjects(renderer.scene!.children, true);
 
         if (intersects.length > 0) {
-            console.log(AMI);
-            const ijk = AMI.UtilsCore.worldToData(
+            const ijk = UtilsCore.worldToData(
                 renderer.stackHelper!.stack.lps2IJK,
                 intersects[0].point
             );
@@ -153,7 +152,8 @@ const Canvas2D: FC<Canvas2DProps> = ({
             const height = domElementRef.current.clientHeight;
 
             //create camera
-            const camera = new AMI.OrthographicCamera(
+            const AmiOrthographicCamera = orthographicCameraFactory(THREE);
+            const camera = new AmiOrthographicCamera(
                 width / -2,
                 width / 2,
                 height / 2,
@@ -163,7 +163,8 @@ const Canvas2D: FC<Canvas2DProps> = ({
             );
 
             //create controls
-            const controls = new AMI.TrackballOrthoControl(camera, domElementRef.current);
+            const AmiTrackballOrthoControl = trackballOrthoControlFactory(THREE);
+            const controls = new AmiTrackballOrthoControl(camera, domElementRef.current);
             controls.staticMoving = true;
             camera.controls = controls;
 

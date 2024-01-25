@@ -1,6 +1,6 @@
 import { FC, ReactNode, useContext, useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import * as AMI from 'ami.js';
+import { trackballControlFactory } from 'ami.js';
 import useFrame from '../../hooks/useFrame.ts';
 import { RenderersContext } from '../QuadViewProvider.tsx';
 
@@ -54,7 +54,8 @@ const Canvas3D: FC<Canvas3DProps> = ({ children, color = 0x212121, targetId }) =
             camera.position.z = 250;
 
             //create controls
-            const controls = new AMI.TrackballControl(camera, domElementRef.current);
+            const AmiTrackballControl = trackballControlFactory(THREE);
+            const controls = new AmiTrackballControl(camera, domElementRef.current);
             controls.rotateSpeed = 10.5;
             controls.zoomSpeed = 1.2;
             controls.panSpeed = 0.8;

@@ -1,10 +1,10 @@
 import { useContext, useEffect } from 'react';
 import { SliceContext } from './Canvas2D.tsx';
 import { RenderersContext, StackContext } from '../QuadViewProvider.tsx';
-import * as AMI from 'ami.js';
 import * as THREE from 'three';
 import { helpersStatusSlice } from '../../store/reducers/helpersStatus.ts';
 import { useAppDispatch } from '../../hooks/redux.ts';
+import { stackHelperFactory } from 'ami.js';
 
 const StackHelper = () => {
     const { sliceColor, sliceOrientation } = useContext(SliceContext);
@@ -44,7 +44,8 @@ const StackHelper = () => {
     useEffect(() => {
         //Init Helper Stack
         if (stack) {
-            const stackHelper = new AMI.StackHelper(stack);
+            const AmiStackHelper = stackHelperFactory(THREE);
+            const stackHelper = new AmiStackHelper(stack);
             renderer.stackHelper = stackHelper;
 
             stackHelper.bbox.visible = false;
