@@ -22,6 +22,8 @@ import AppToolbarButton from './AppToolbarButton.tsx';
 import { NestedMenuItem } from 'mui-nested-menu';
 import { db } from '../db/db.ts';
 import DicomLoader from '../helpers/Dicom/DicomLoader.ts';
+import { useAppSelector } from '../hooks/redux.ts';
+import getAortaStl from '../API/getAortaStl.ts';
 
 const AppToolbar = () => {
     const theme = createTheme({
@@ -31,6 +33,8 @@ const AppToolbar = () => {
             },
         },
     });
+
+    const currentPatient = useAppSelector((state) => state.currentPatient.patient);
 
     //notes menu
     const [anchorElNotes, setAnchorElNotes] = useState<null | HTMLElement>(null);
@@ -42,7 +46,7 @@ const AppToolbar = () => {
     const patientInputRef = useRef<HTMLInputElement>(null);
     const handleClickInputPatient = () => patientInputRef.current?.click();
 
-    const handlePatientUpload = async () => {
+    const handlePatientUpload = () => {
         const files = patientInputRef.current?.files;
 
         if (files) {
@@ -67,6 +71,24 @@ const AppToolbar = () => {
         }
 
         handleCloseNotes();
+    };
+
+    const handleClickAortaSegmentation = async () => {
+        const trashhold = 30;
+        const patientData = await db.patientsData
+            .where('id')
+            .equals(currentPatient ? currentPatient.id : '')
+            .first();
+        console.log(patientData);
+        if (patientData) {
+            getAortaStl(patientData.files, trashhold)
+                .then((data) => {
+                    console.log(data);
+                })
+                .catch((err) => {
+                    console.log(err.message);
+                });
+        }
     };
 
     return (
@@ -111,6 +133,9 @@ const AppToolbar = () => {
                             />
                         </MenuItem>
                         <MenuItem>Установить референтные точки комиссур</MenuItem>
+                        <MenuItem disabled={!currentPatient} onClick={handleClickAortaSegmentation}>
+                            Сегментировать аорту
+                        </MenuItem>
                         <MenuItem>Вычислить расстояния между точками комиссур</MenuItem>
                         <MenuItem>Показать срез</MenuItem>
                         <MenuItem>Показать только аорту</MenuItem>
