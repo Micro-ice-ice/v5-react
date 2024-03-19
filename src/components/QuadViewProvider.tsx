@@ -41,6 +41,7 @@ const QuadViewProvider: FC<{ children?: ReactNode }> = ({ children }) => {
             DicomLoader.loadSeries(files)
                 .then((series) => {
                     const loadedStack = series.stack[0];
+                    console.log(loadedStack);
                     loadedStack.prepare();
 
                     //setup status for all helpers

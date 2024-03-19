@@ -129,11 +129,10 @@ const Canvas2D: FC<Canvas2DProps> = ({
     useFrame(() => {
         renderer.controls?.update();
 
-        renderer.gl?.clear();
+        // renderer.gl?.clear();
         renderer.gl?.render(renderer.scene!, renderer.camera!);
 
-        renderer.gl?.clearDepth();
-        renderer.gl?.render(r0.clipScene!, r2.camera!);
+        // renderer.gl?.clearDepth();
     });
 
     useEffect(() => {

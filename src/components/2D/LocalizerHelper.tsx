@@ -3,7 +3,6 @@ import { SliceContext } from './Canvas2D.tsx';
 import { RenderersContext, StackContext } from '../QuadViewProvider.tsx';
 import * as THREE from 'three';
 import { localizerHelperFactory } from 'ami.js';
-import useFrame from '../../hooks/useFrame.ts';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux.ts';
 import { helpersStatusSlice } from '../../store/reducers/helpersStatus.ts';
 
@@ -28,13 +27,6 @@ const LocalizerHelper = () => {
         localizerHelper.canvasWidth = width;
         localizerHelper.canvasHeight = height;
     };
-
-    useFrame(() => {
-        if (renderer.localizerScene) {
-            renderer.gl?.clearDepth();
-            renderer.gl?.render(renderer.localizerScene!, renderer.camera!);
-        }
-    });
 
     const stackHelpersStatusUpdate = () => {
         if (r1.localizerHelper && r2.localizerHelper && r3.localizerHelper) {

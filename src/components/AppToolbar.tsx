@@ -23,7 +23,6 @@ import { NestedMenuItem } from 'mui-nested-menu';
 import { db } from '../db/db.ts';
 import DicomLoader from '../helpers/Dicom/DicomLoader.ts';
 import { useAppSelector } from '../hooks/redux.ts';
-import getAortaStl from '../API/getAortaStl.ts';
 
 const AppToolbar = () => {
     const theme = createTheme({

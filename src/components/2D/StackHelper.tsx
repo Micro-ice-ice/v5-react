@@ -4,7 +4,7 @@ import { RenderersContext, StackContext } from '../QuadViewProvider.tsx';
 import * as THREE from 'three';
 import { helpersStatusSlice } from '../../store/reducers/helpersStatus.ts';
 import { useAppDispatch } from '../../hooks/redux.ts';
-import { stackHelperFactory } from 'ami.js';
+import * as AMI from 'ami.js';
 
 const StackHelper = () => {
     const { sliceColor, sliceOrientation } = useContext(SliceContext);
@@ -44,8 +44,8 @@ const StackHelper = () => {
     useEffect(() => {
         //Init Helper Stack
         if (stack) {
-            const AmiStackHelper = stackHelperFactory(THREE);
-            const stackHelper = new AmiStackHelper(stack);
+            const AmiStackHelper = AMI.stackHelperFactory(THREE);
+            const stackHelper: AMI.StackHelper = new AmiStackHelper(stack);
             renderer.stackHelper = stackHelper;
 
             stackHelper.bbox.visible = false;
@@ -69,10 +69,12 @@ const StackHelper = () => {
             renderer.camera!.box = box;
             renderer.camera!.orientation = sliceOrientation;
             renderer.camera!.update();
-            renderer.camera!.fitBox(2, 1);
+            renderer.camera!.fitBox(2);
 
             stackHelper.orientation = renderer.camera!.stackOrientation;
             stackHelper.index = Math.floor(stackHelper.orientationMaxIndex / 2);
+
+            console.log(stackHelper);
 
             renderer.camera!.add(stackHelper);
             renderer.scene?.add(stackHelper);
