@@ -36,7 +36,7 @@ const QuadViewProvider: FC<{ children?: ReactNode }> = ({ children }) => {
 
     useEffect(() => {
         if (currentPatientData) {
-            const files = currentPatientData.files;
+            const files = currentPatientData.dicomFiles;
 
             DicomLoader.loadSeries(files)
                 .then((series) => {

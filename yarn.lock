@@ -569,6 +569,11 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@msgpack/msgpack@^3.0.0-beta2":
+  version "3.0.0-beta2"
+  resolved "https://registry.yarnpkg.com/@msgpack/msgpack/-/msgpack-3.0.0-beta2.tgz#5bccee30f84df220b33905e3d8249ba96deca0b7"
+  integrity sha512-y+l1PNV0XDyY8sM3YtuMLK5vE3/hkfId+Do8pLo/OPxfxuFAUwcGz3oiiUuV46/aBpwTzZ+mRWVMtlSKbradhw==
+
 "@mui/base@5.0.0-beta.28":
   version "5.0.0-beta.28"
   resolved "https://registry.npmjs.org/@mui/base/-/base-5.0.0-beta.28.tgz"
@@ -3154,6 +3159,11 @@ osenv@^0.1.0:
   dependencies:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.0"
+
+"ozaki-api@file:../zeroapp/ozaki/api":
+  version "1.0.0"
+  dependencies:
+    "@msgpack/msgpack" "^3.0.0-beta2"
 
 p-limit@^3.0.2:
   version "3.1.0"

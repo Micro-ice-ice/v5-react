@@ -1,6 +1,11 @@
 import { createContext, FC, ReactNode, useContext, useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { orthographicCameraFactory, trackballOrthoControlFactory, UtilsCore } from 'ami.js';
+import {
+    LocalizerHelper,
+    orthographicCameraFactory,
+    trackballOrthoControlFactory,
+    UtilsCore,
+} from 'ami.js';
 import useFrame from '../../hooks/useFrame.ts';
 import { RenderersContext } from '../QuadViewProvider.tsx';
 import renderer2D from '../../models/Renderer2D.ts';
@@ -27,7 +32,7 @@ const Canvas2D: FC<Canvas2DProps> = ({
     targetId,
 }) => {
     const domElementRef = useRef<HTMLDivElement>(null);
-    const { r0, r1, r2, r3 } = useContext(RenderersContext);
+    const { r1, r2, r3 } = useContext(RenderersContext);
     const renderer = sliceOrientation === 'axial' ? r1 : sliceOrientation === 'sagittal' ? r2 : r3;
 
     const handleResize = () => {
@@ -40,10 +45,7 @@ const Canvas2D: FC<Canvas2DProps> = ({
         gl.setSize(width, height);
     };
 
-    const updateLocalizer = (
-        renderer: renderer2D,
-        targetLocalizersHelpers: AMI.LocalizerHelper[]
-    ) => {
+    const updateLocalizer = (renderer: renderer2D, targetLocalizersHelpers: LocalizerHelper[]) => {
         const stackHelper = renderer.stackHelper!;
         const localizerHelper = renderer.localizerHelper!;
         const plane = stackHelper.slice.cartesianEquation();

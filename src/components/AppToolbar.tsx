@@ -58,8 +58,12 @@ const AppToolbar = () => {
                     });
 
                     db.patientsData.put({
-                        id: model.patientID,
-                        files: files,
+                        id: model.patientID + model.studyDate,
+                        patientId: model.patientID,
+                        numberOfFrames: files.length,
+                        date: model.studyDate,
+                        dicomFiles: files,
+                        isAortaSegmented: false,
                     });
 
                     console.log('Added patient ' + model.patientName);
@@ -72,23 +76,7 @@ const AppToolbar = () => {
         handleCloseNotes();
     };
 
-    const handleClickAortaSegmentation = async () => {
-        const trashhold = 30;
-        const patientData = await db.patientsData
-            .where('id')
-            .equals(currentPatient ? currentPatient.id : '')
-            .first();
-        console.log(patientData);
-        if (patientData) {
-            getAortaStl(patientData.files, trashhold)
-                .then((data) => {
-                    console.log(data);
-                })
-                .catch((err) => {
-                    console.log(err.message);
-                });
-        }
-    };
+    const handleClickAortaSegmentation = async () => {};
 
     return (
         <ThemeProvider theme={theme}>
