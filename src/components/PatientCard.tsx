@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardActionArea, CardContent, Typography } from '@mui/material';
+import { Card, CardContent, Typography } from '@mui/material';
 import Patient from '../models/Patient.ts';
 // import { useAppDispatch, useAppSelector } from '../hooks/redux.ts';
 // import { currentPatientSlice } from '../store/reducers/currentPatient.ts';
@@ -20,18 +20,18 @@ const PatientCard: React.FC<PatientCardProps> = ({ patient }) => {
     //     }
     // };
     return (
-        <Card sx={{ m: 0.1, width: '100%', borderRadius: 0 }}>
-            <CardActionArea>
-                <CardContent sx={{ px: '1rem', py: '0.75rem' }}>
-                    <Typography variant="h6" align="center" sx={{ fontSize: '1rem' }}>
-                        {'Пациент: ' + patient.name}
-                    </Typography>
-                    <Typography variant="h6" align="center" sx={{ fontSize: '1rem' }}>
-                        {'Возраст: ' + patient.age}
-                    </Typography>
-                </CardContent>
-            </CardActionArea>
-            <PatientDataCardList patientId={patient.id} />
+        <Card sx={{ m: 0.5, borderRadius: 0, border: 0.5 }}>
+            <CardContent sx={{ px: '1rem', py: '0.75rem' }}>
+                <Typography variant="h6" sx={{ fontSize: '1rem' }}>
+                    {'Пациент: ' + patient.name}
+                </Typography>
+                <Typography variant="h6" sx={{ fontSize: '1rem' }}>
+                    {'Возраст: ' + patient.age}
+                </Typography>
+            </CardContent>
+            <Card sx={{ m: 0.5, borderRadius: 0, border: 0.5 }}>
+                <PatientDataCardList patient={patient} />
+            </Card>
         </Card>
     );
 };

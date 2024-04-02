@@ -10,8 +10,8 @@ function App() {
             <AppToolbar />
 
             <Stack direction="row" height="100%">
-                <QuadView />
                 <PatientCardList />
+                <QuadView />
             </Stack>
         </div>
     );

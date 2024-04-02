@@ -3,15 +3,16 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../db/db.ts';
 import { Stack } from '@mui/material';
 import PatientDataCard from './PatientDataCard.tsx';
+import Patient from '../models/Patient.ts';
 
 interface PatientDataCardListProps {
-    patientId: string;
+    patient: Patient;
 }
-const PatientDataCardList: React.FC<PatientDataCardListProps> = ({ patientId }) => {
+const PatientDataCardList: React.FC<PatientDataCardListProps> = ({ patient }) => {
     const patientDataList = useLiveQuery(() => {
         return db.patientsData
             .where('patientId')
-            .equals(patientId)
+            .equals(patient.id)
             .toArray((patientDataArray) => {
                 return patientDataArray.map(({ dicomFiles, aortaFiles, ...rest }) => {
                     return rest;
@@ -20,10 +21,16 @@ const PatientDataCardList: React.FC<PatientDataCardListProps> = ({ patientId }) 
     });
     return (
         <>
-            <Stack direction="column" sx={{ width: '20%', minWidth: '14rem' }}>
+            <Stack direction="column" sx={{ width: '100%' }}>
                 {patientDataList ? (
                     patientDataList.map((patientData) => {
-                        return <PatientDataCard key={patientData.id!} patientData={patientData} />;
+                        return (
+                            <PatientDataCard
+                                key={patientData.id!}
+                                patient={patient}
+                                patientData={patientData}
+                            />
+                        );
                     })
                 ) : (
                     <></>

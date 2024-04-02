@@ -9,8 +9,8 @@ const PatientCardList = () => {
     });
 
     return (
-        <>
-            <Stack direction="column" sx={{ width: '20%', minWidth: '14rem' }}>
+        <div style={{ overflowY: 'auto', width: '18%' }}>
+            <Stack direction="column">
                 {patients ? (
                     patients.map((patient) => {
                         return <PatientCard key={patient.id} patient={patient} />;
@@ -19,7 +19,7 @@ const PatientCardList = () => {
                     <></>
                 )}
             </Stack>
-        </>
+        </div>
     );
 };
 
