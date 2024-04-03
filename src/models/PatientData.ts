@@ -5,7 +5,7 @@ interface PatientData {
     numberOfFrames: number;
     dicomFiles: FileList;
     isAortaSegmented: boolean;
-    aortaFiles?: File;
+    aortaFile?: File;
     aortaThreshold?: number;
 }
 

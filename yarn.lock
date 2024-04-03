@@ -889,7 +889,7 @@
 
 "@types/three@0.125.2":
   version "0.125.2"
-  resolved "https://registry.npmjs.org/@types/three/-/three-0.125.2.tgz"
+  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.125.2.tgz#b47aa31d9fc9af69c9bb4b1945c9183ce33ca954"
   integrity sha512-cHoXyeXg/LJ6Qe6QFqSAm41erGDpTtcfesiUbkvCyLhb3hfCT/z6P8sq7OCMxe3b3Dn1LL6H6rzU7Lo+EMyTaQ==
 
 "@types/use-sync-external-store@^0.0.3":
@@ -3161,7 +3161,7 @@ osenv@^0.1.0:
     os-tmpdir "^1.0.0"
 
 "ozaki-api@file:../zeroapp/ozaki/api":
-  version "1.0.0"
+  version "1.1.5"
   dependencies:
     "@msgpack/msgpack" "^3.0.0-beta2"
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, Typography } from '@mui/material';
 import Patient from '../models/Patient.ts';
 // import { useAppDispatch, useAppSelector } from '../hooks/redux.ts';
-// import { currentPatientSlice } from '../store/reducers/currentPatient.ts';
+// import { currentPatientSlice } from '../store/reducers/currentPatientData.ts';
 import PatientDataCardList from './PatientDataCardList.tsx';
 
 interface PatientCardProps {

@@ -74,8 +74,6 @@ const StackHelper = () => {
             stackHelper.orientation = renderer.camera!.stackOrientation;
             stackHelper.index = Math.floor(stackHelper.orientationMaxIndex / 2);
 
-            console.log(stackHelper);
-
             renderer.camera!.add(stackHelper);
             renderer.scene?.add(stackHelper);
             r0.scene?.add(renderer.scene!);

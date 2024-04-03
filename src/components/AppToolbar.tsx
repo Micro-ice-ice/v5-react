@@ -22,7 +22,6 @@ import AppToolbarButton from './AppToolbarButton.tsx';
 import { NestedMenuItem } from 'mui-nested-menu';
 import { db } from '../db/db.ts';
 import DicomLoader from '../helpers/Dicom/DicomLoader.ts';
-import { useAppSelector } from '../hooks/redux.ts';
 
 const AppToolbar = () => {
     const theme = createTheme({
@@ -32,8 +31,6 @@ const AppToolbar = () => {
             },
         },
     });
-
-    const currentPatient = useAppSelector((state) => state.currentPatient.patient);
 
     //notes menu
     const [anchorElNotes, setAnchorElNotes] = useState<null | HTMLElement>(null);
@@ -75,8 +72,6 @@ const AppToolbar = () => {
 
         handleCloseNotes();
     };
-
-    const handleClickAortaSegmentation = async () => {};
 
     return (
         <ThemeProvider theme={theme}>
@@ -120,9 +115,7 @@ const AppToolbar = () => {
                             />
                         </MenuItem>
                         <MenuItem>Установить референтные точки комиссур</MenuItem>
-                        <MenuItem disabled={!currentPatient} onClick={handleClickAortaSegmentation}>
-                            Сегментировать аорту
-                        </MenuItem>
+                        <MenuItem>Сегментировать аорту</MenuItem>
                         <MenuItem>Вычислить расстояния между точками комиссур</MenuItem>
                         <MenuItem>Показать срез</MenuItem>
                         <MenuItem>Показать только аорту</MenuItem>

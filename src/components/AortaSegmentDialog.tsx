@@ -15,7 +15,7 @@ interface AortaSegmentDialogProps {
     open: boolean;
     onClose: (threshold?: number) => void;
     patient: Patient;
-    patientData: Omit<PatientData, 'aortaFiles' | 'dicomFiles'>;
+    patientData: Omit<PatientData, 'aortaFile' | 'dicomFiles'>;
 }
 
 const AortaSegmentDialog: React.FC<AortaSegmentDialogProps> = ({
@@ -24,7 +24,7 @@ const AortaSegmentDialog: React.FC<AortaSegmentDialogProps> = ({
     patientData,
     onClose,
 }) => {
-    const [number, setNumber] = useState('30');
+    const [number, setNumber] = useState('20');
     const [isValid, setIsValid] = useState(true);
 
     const handleNumberChange = (event: { target: { value: string } }) => {

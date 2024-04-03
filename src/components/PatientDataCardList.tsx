@@ -14,7 +14,7 @@ const PatientDataCardList: React.FC<PatientDataCardListProps> = ({ patient }) =>
             .where('patientId')
             .equals(patient.id)
             .toArray((patientDataArray) => {
-                return patientDataArray.map(({ dicomFiles, aortaFiles, ...rest }) => {
+                return patientDataArray.map(({ dicomFiles, aortaFile, ...rest }) => {
                     return rest;
                 });
             });

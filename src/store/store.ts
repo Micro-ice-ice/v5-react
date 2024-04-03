@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import currentPatientReducer from './reducers/currentPatient.ts';
+import currentPatientDataReducer from './reducers/currentPatientData.ts';
 import helpersStatusReducer from './reducers/helpersStatus.ts';
 
 const store = configureStore({
     reducer: {
-        currentPatient: currentPatientReducer,
+        currentPatientData: currentPatientDataReducer,
         helpersStatus: helpersStatusReducer,
     },
 });

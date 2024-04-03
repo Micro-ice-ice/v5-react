@@ -3,13 +3,21 @@ import React, { useState } from 'react';
 import { Box, Button, ButtonBase, CardActions, CardContent, Typography } from '@mui/material';
 import AortaSegmentDialog from './AortaSegmentDialog.tsx';
 import Patient from '../models/Patient.ts';
+import { useAppDispatch, useAppSelector } from '../hooks/redux.ts';
+import { currentPatientDataSlice } from '../store/reducers/currentPatientData.ts';
+import { ServiceAPI } from 'ozaki-api';
+import { db } from '../db/db.ts';
 
 interface PatientDataCardProps {
     patient: Patient;
-    patientData: Omit<PatientData, 'aortaFiles' | 'dicomFiles'>;
+    patientData: Omit<PatientData, 'aortaFile' | 'dicomFiles'>;
 }
 
 const PatientDataCard: React.FC<PatientDataCardProps> = ({ patientData, patient }) => {
+    const currentPatientData = useAppSelector((state) => state.currentPatientData);
+    const { selectPatientData } = currentPatientDataSlice.actions;
+    const dispatch = useAppDispatch();
+
     const [open, setOpen] = useState(false);
 
     const handleClickSegmentAorta = () => {
@@ -17,8 +25,37 @@ const PatientDataCard: React.FC<PatientDataCardProps> = ({ patientData, patient 
     };
 
     const handleClose = (threshold?: number) => {
-        console.log(threshold);
         setOpen(false);
+        if (threshold) {
+            db.patientsData.get(patientData.id).then((value) => {
+                if (value) {
+                    const apiUrl = 'ws://localhost:7000/';
+                    const ozakiApi = new ServiceAPI(apiUrl);
+
+                    ozakiApi.segaorta(value.dicomFiles, threshold).then((file) => {
+                        console.log(file);
+                        db.patientsData
+                            .update(patientData.id, {
+                                isAortaSegmented: true,
+                                aortaThreshold: threshold,
+                                aortaFile: file,
+                            })
+                            .then(() => {
+                                console.log('Поля успешно обновлены в базе данных');
+                            })
+                            .catch((error) => {
+                                console.error('Ошибка при обновлении полей в базе данных:', error);
+                            });
+                    });
+                }
+            });
+        }
+    };
+
+    const handleClickLoadPatientData = () => {
+        if (currentPatientData.patientData?.id != patientData.id) {
+            dispatch(selectPatientData(patientData));
+        }
     };
 
     return (
@@ -30,7 +67,7 @@ const PatientDataCard: React.FC<PatientDataCardProps> = ({ patientData, patient 
                 <Typography variant="h6" sx={{ fontSize: '1rem' }}>
                     {`DICOM: ${patientData.numberOfFrames} снимков`}
                 </Typography>
-                <ButtonBase onClick={handleClickSegmentAorta}>
+                <ButtonBase title={'Сегментировать аорту'} onClick={handleClickSegmentAorta}>
                     <Typography variant="h6" sx={{ fontSize: '1rem' }}>
                         {patientData.isAortaSegmented
                             ? `Аорта сегментирована (${patientData.aortaThreshold})`
@@ -44,7 +81,7 @@ const PatientDataCard: React.FC<PatientDataCardProps> = ({ patientData, patient 
                     patientData={patientData}></AortaSegmentDialog>
             </CardContent>
             <CardActions>
-                <Button>Загрузить</Button>
+                <Button onClick={handleClickLoadPatientData}>Загрузить</Button>
             </CardActions>
         </Box>
     );

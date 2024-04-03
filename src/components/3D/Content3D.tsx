@@ -1,12 +1,13 @@
 import { useContext, useEffect } from 'react';
 import * as THREE from 'three';
 import { boundingBoxHelperFactory } from 'ami.js';
-import { RenderersContext, StackContext } from '../QuadViewProvider.tsx';
+import { AortaContext, RenderersContext, StackContext } from '../QuadViewProvider.tsx';
 
 const Content3D = () => {
     const { r0 } = useContext(RenderersContext);
     const renderer = r0;
     const stack = useContext(StackContext);
+    const aortaMesh = useContext(AortaContext);
 
     useEffect(() => {
         if (stack) {
@@ -19,6 +20,10 @@ const Content3D = () => {
             const AmiBoundingBoxHelper = boundingBoxHelperFactory(THREE);
             const boxHelper = new AmiBoundingBoxHelper(stack);
             renderer.scene?.add(boxHelper);
+        }
+
+        if (aortaMesh) {
+            renderer.scene?.add(aortaMesh);
         }
 
         return () => {
