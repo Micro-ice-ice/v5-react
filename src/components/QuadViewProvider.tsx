@@ -9,7 +9,15 @@ import Renderer2D from '../models/Renderer2D.ts';
 import Renderer3D from '../models/Renderer3D.ts';
 import { helpersStatusSlice } from '../store/reducers/helpersStatus.ts';
 import { STLLoader } from '../helpers/STLLoader';
-import { BufferGeometry, Mesh, MeshLambertMaterial, MeshPhongMaterial } from 'three';
+import {
+    BufferGeometry,
+    DoubleSide,
+    Mesh,
+    MeshBasicMaterial,
+    MeshLambertMaterial,
+    MeshNormalMaterial,
+    MeshPhongMaterial,
+} from 'three';
 
 export const StackContext = createContext<AMI.Stack | null>(null);
 
@@ -58,25 +66,20 @@ const QuadViewProvider: FC<{ children?: ReactNode }> = ({ children }) => {
                         const file = currentPatientData.aortaFile!;
                         const loader = new STLLoader();
 
-                        loader.load(
-                            URL.createObjectURL(file),
-                            (geometry: BufferGeometry | undefined) => {
-                                const material = new MeshPhongMaterial({
-                                    color: 0x000000,
-                                    opacity: 1,
-                                    emissive: 0xff0000,
-                                });
+                        loader.load(URL.createObjectURL(file), (geometry: BufferGeometry) => {
+                            const material = new MeshLambertMaterial({
+                                color: 0xf44336,
+                            });
 
-                                geometry?.computeVertexNormals();
-                                geometry?.computeBoundingBox();
+                            const mesh = new Mesh(geometry, material);
 
-                                const mesh = new Mesh(geometry, material);
-
-                                //set new stack
-                                setStack(loadedStack);
-                                setAortaMesh(mesh);
-                            }
-                        );
+                            //set new stack
+                            setStack(loadedStack);
+                            setAortaMesh(mesh);
+                        });
+                    } else {
+                        setAortaMesh(null);
+                        setStack(loadedStack);
                     }
                 })
                 .catch((error) => {

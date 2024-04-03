@@ -64,7 +64,7 @@ const Canvas3D: FC<Canvas3DProps> = ({ children, color = 0x212121, targetId }) =
 
             //create scene
             const scene = new THREE.Scene();
-            // scene.add(new THREE.Mesh(new BoxGeometry(), new MeshBasicMaterial()));
+            // scene.add(new THREE.Mesh(new BoxGeometry(), new MeshLambertMaterial()));
 
             const clipScene = new THREE.Scene();
 

@@ -1,7 +1,8 @@
 import { useContext, useEffect } from 'react';
 import * as THREE from 'three';
-import { boundingBoxHelperFactory } from 'ami.js';
+import { BoundingBoxHelper, boundingBoxHelperFactory } from 'ami.js';
 import { AortaContext, RenderersContext, StackContext } from '../QuadViewProvider.tsx';
+import { MeshLambertMaterial } from 'three';
 
 const Content3D = () => {
     const { r0 } = useContext(RenderersContext);
@@ -18,7 +19,8 @@ const Content3D = () => {
             renderer.controls?.target.set(centerLPS.x, centerLPS.y, centerLPS.z);
 
             const AmiBoundingBoxHelper = boundingBoxHelperFactory(THREE);
-            const boxHelper = new AmiBoundingBoxHelper(stack);
+            const boxHelper: BoundingBoxHelper = new AmiBoundingBoxHelper(stack);
+            renderer.boxHelper = boxHelper;
             renderer.scene?.add(boxHelper);
         }
 
@@ -29,7 +31,18 @@ const Content3D = () => {
         return () => {
             //clear scene
             if (renderer.scene) {
-                renderer.scene.remove(...renderer.scene!.children);
+                if (renderer.boxHelper) {
+                    renderer.scene.remove(renderer.boxHelper);
+                    renderer.boxHelper.dispose();
+                }
+                if (aortaMesh) {
+                    console.log('clear');
+                    renderer.scene.remove(aortaMesh);
+                    aortaMesh.geometry.dispose();
+                    (aortaMesh.material as MeshLambertMaterial).dispose();
+                }
+
+                // renderer.scene.remove(...renderer.scene!.children);
             }
         };
     });
