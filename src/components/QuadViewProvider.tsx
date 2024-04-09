@@ -9,15 +9,7 @@ import Renderer2D from '../models/Renderer2D.ts';
 import Renderer3D from '../models/Renderer3D.ts';
 import { helpersStatusSlice } from '../store/reducers/helpersStatus.ts';
 import { STLLoader } from '../helpers/STLLoader';
-import {
-    BufferGeometry,
-    DoubleSide,
-    Mesh,
-    MeshBasicMaterial,
-    MeshLambertMaterial,
-    MeshNormalMaterial,
-    MeshPhongMaterial,
-} from 'three';
+import { BufferGeometry, Mesh, MeshLambertMaterial } from 'three';
 
 export const StackContext = createContext<AMI.Stack | null>(null);
 
@@ -49,6 +41,7 @@ const QuadViewProvider: FC<{ children?: ReactNode }> = ({ children }) => {
     const [stack, setStack] = useState<AMI.Stack | null>(null);
     const [aortaMesh, setAortaMesh] = useState<Mesh | null>(null);
 
+    //update stack
     useEffect(() => {
         if (currentPatientData) {
             const files = currentPatientData.dicomFiles;
@@ -62,31 +55,32 @@ const QuadViewProvider: FC<{ children?: ReactNode }> = ({ children }) => {
                     dispatch(setStackHelpersStatus(false));
                     dispatch(setLocalizerHelpersStatus(false));
 
-                    if (currentPatientData.isAortaSegmented) {
-                        const file = currentPatientData.aortaFile!;
-                        const loader = new STLLoader();
-
-                        loader.load(URL.createObjectURL(file), (geometry: BufferGeometry) => {
-                            const material = new MeshLambertMaterial({
-                                color: 0xf44336,
-                            });
-
-                            const mesh = new Mesh(geometry, material);
-
-                            //set new stack
-                            setStack(loadedStack);
-                            setAortaMesh(mesh);
-                        });
-                    } else {
-                        setAortaMesh(null);
-                        setStack(loadedStack);
-                    }
+                    setStack(loadedStack);
                 })
                 .catch((error) => {
                     console.error(error);
                 });
         }
-    }, [currentPatientData, dispatch, setLocalizerHelpersStatus, setStackHelpersStatus]);
+    }, [currentPatientData]);
+
+    //update aorta mesh
+    useEffect(() => {
+        if (currentPatientData && currentPatientData.isAortaSegmented) {
+            const file = currentPatientData.aortaFile!;
+            const loader = new STLLoader();
+
+            loader.load(URL.createObjectURL(file), (geometry: BufferGeometry) => {
+                const material = new MeshLambertMaterial({
+                    color: 0xf44336,
+                });
+
+                const mesh = new Mesh(geometry, material);
+                setAortaMesh(mesh);
+            });
+        } else {
+            setAortaMesh(null);
+        }
+    }, [currentPatientData]);
 
     const rendererRef = useRef<Renderers>({ r0: {}, r1: {}, r2: {}, r3: {} });
 

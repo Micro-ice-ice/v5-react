@@ -154,6 +154,14 @@ const LocalizerHelper = () => {
         };
     });
 
+    const { dicomVisible } = useAppSelector((state) => state.visibleStatus);
+
+    useEffect(() => {
+        if (renderer.localizerHelper) {
+            renderer.localizerHelper.visible = dicomVisible;
+        }
+    }, [dicomVisible, renderer.localizerHelper]);
+
     return <></>;
 };
 

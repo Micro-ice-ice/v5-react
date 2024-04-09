@@ -4,6 +4,7 @@ import Content3D from './3D/Content3D.tsx';
 import Canvas2D from './2D/Canvas2D.tsx';
 import StackHelper from './2D/StackHelper.tsx';
 import LocalizerHelper from './2D/LocalizerHelper.tsx';
+import Aorta3D from './3D/Aorta3D.tsx';
 
 const QuadView = () => {
     return (
@@ -18,6 +19,7 @@ const QuadView = () => {
             <QuadViewProvider>
                 <Canvas3D targetId={'0'}>
                     <Content3D />
+                    <Aorta3D />
                 </Canvas3D>
                 <Canvas2D
                     color={0x121212}

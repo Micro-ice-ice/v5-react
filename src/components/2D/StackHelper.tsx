@@ -3,7 +3,8 @@ import { SliceContext } from './Canvas2D.tsx';
 import { RenderersContext, StackContext } from '../QuadViewProvider.tsx';
 import * as THREE from 'three';
 import { helpersStatusSlice } from '../../store/reducers/helpersStatus.ts';
-import { useAppDispatch } from '../../hooks/redux.ts';
+import { visibleStatusSlice } from '../../store/reducers/visibleStatus.ts';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux.ts';
 import * as AMI from 'ami.js';
 
 const StackHelper = () => {
@@ -15,6 +16,7 @@ const StackHelper = () => {
     const stack = useContext(StackContext);
 
     const { setStackHelpersStatus } = helpersStatusSlice.actions;
+    const { setDicomVisible } = visibleStatusSlice.actions;
     const dispatch = useAppDispatch();
 
     const handleResizeStackHelperCanvas = () => {
@@ -75,6 +77,8 @@ const StackHelper = () => {
             stackHelper.index = Math.floor(stackHelper.orientationMaxIndex / 2);
 
             renderer.camera!.add(stackHelper);
+
+            setDicomVisible(true);
             renderer.scene?.add(stackHelper);
             r0.scene?.add(renderer.scene!);
 
@@ -100,6 +104,32 @@ const StackHelper = () => {
             }
         };
     });
+
+    return (
+        <>
+            <StackHelperVisible />
+        </>
+    );
+};
+
+const StackHelperVisible = () => {
+    const { sliceOrientation } = useContext(SliceContext);
+
+    const { r0, r1, r2, r3 } = useContext(RenderersContext);
+    const renderer = sliceOrientation === 'axial' ? r1 : sliceOrientation === 'sagittal' ? r2 : r3;
+
+    const { dicomVisible } = useAppSelector((state) => state.visibleStatus);
+
+    if (renderer.stackHelper) {
+        console.log(dicomVisible);
+        if (dicomVisible) {
+            renderer.scene?.add(renderer.stackHelper);
+            r0.scene?.add(renderer.stackHelper);
+        } else {
+            renderer.scene?.remove(renderer.stackHelper);
+            r0.scene?.remove(renderer.stackHelper);
+        }
+    }
 
     return <></>;
 };

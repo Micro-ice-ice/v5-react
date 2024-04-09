@@ -1,14 +1,15 @@
 import { useContext, useEffect } from 'react';
 import * as THREE from 'three';
 import { BoundingBoxHelper, boundingBoxHelperFactory } from 'ami.js';
-import { AortaContext, RenderersContext, StackContext } from '../QuadViewProvider.tsx';
-import { MeshLambertMaterial } from 'three';
+import { RenderersContext, StackContext } from '../QuadViewProvider.tsx';
+import { useAppSelector } from '../../hooks/redux.ts';
 
 const Content3D = () => {
     const { r0 } = useContext(RenderersContext);
     const renderer = r0;
     const stack = useContext(StackContext);
-    const aortaMesh = useContext(AortaContext);
+
+    console.log('rerender');
 
     useEffect(() => {
         if (stack) {
@@ -24,10 +25,6 @@ const Content3D = () => {
             renderer.scene?.add(boxHelper);
         }
 
-        if (aortaMesh) {
-            renderer.scene?.add(aortaMesh);
-        }
-
         return () => {
             //clear scene
             if (renderer.scene) {
@@ -35,19 +32,31 @@ const Content3D = () => {
                     renderer.scene.remove(renderer.boxHelper);
                     renderer.boxHelper.dispose();
                 }
-                if (aortaMesh) {
-                    console.log('clear');
-                    renderer.scene.remove(aortaMesh);
-                    aortaMesh.geometry.dispose();
-                    (aortaMesh.material as MeshLambertMaterial).dispose();
-                }
-
-                // renderer.scene.remove(...renderer.scene!.children);
             }
         };
     });
 
-    return <div></div>;
+    const { dicomVisible } = useAppSelector((state) => state.visibleStatus);
+
+    useEffect(() => {
+        if (renderer.boxHelper) {
+            if (dicomVisible) {
+                renderer.scene?.add(renderer.boxHelper);
+            } else {
+                renderer.scene?.remove(renderer.boxHelper);
+            }
+        }
+    }, [dicomVisible]);
+
+    return (
+        <>
+            <Content3DVisible />
+        </>
+    );
+};
+
+const Content3DVisible = () => {
+    return <></>;
 };
 
 export default Content3D;

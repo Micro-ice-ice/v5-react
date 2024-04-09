@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const useFrame = (callback) => {
+const useFrame = (callback: () => void) => {
     useEffect(() => {
         const animate = () => {
             callback();
