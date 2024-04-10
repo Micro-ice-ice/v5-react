@@ -1,14 +1,13 @@
-import { useContext, useEffect } from 'react';
-import { AortaContext, RenderersContext } from '../QuadViewProvider.tsx';
-
+import { useEffect } from 'react';
 import { MeshLambertMaterial } from 'three';
-// import Aorta3DVisible from './Aorta3DVisible.tsx';
 import { useAppSelector } from '../../hooks/redux.ts';
+import useRenderers from '../../hooks/useRenderers.ts';
+import useAorta from '../../hooks/useAorta.ts';
 
 const Aorta3D = () => {
-    const { r0 } = useContext(RenderersContext);
+    const { r0 } = useRenderers();
     const renderer = r0;
-    const aortaMesh = useContext(AortaContext);
+    const aortaMesh = useAorta();
 
     useEffect(() => {
         if (aortaMesh) {
@@ -39,7 +38,7 @@ const Aorta3D = () => {
 const Aorta3DVisible = () => {
     const { aortaVisible } = useAppSelector((state) => state.visibleStatus);
 
-    const aortaMesh = useContext(AortaContext);
+    const aortaMesh = useAorta();
 
     if (aortaMesh) {
         aortaMesh.visible = aortaVisible;

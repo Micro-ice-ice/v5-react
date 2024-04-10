@@ -6,8 +6,8 @@ interface visibleStatus {
 }
 
 const initialState: visibleStatus = {
-    aortaVisible: false,
-    dicomVisible: false,
+    aortaVisible: true,
+    dicomVisible: true,
 };
 
 export const visibleStatusSlice = createSlice({

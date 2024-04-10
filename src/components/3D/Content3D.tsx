@@ -1,13 +1,14 @@
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import * as THREE from 'three';
 import { BoundingBoxHelper, boundingBoxHelperFactory } from 'ami.js';
-import { RenderersContext, StackContext } from '../QuadViewProvider.tsx';
 import { useAppSelector } from '../../hooks/redux.ts';
+import useRenderers from '../../hooks/useRenderers.ts';
+import useStack from '../../hooks/useStack.ts';
 
 const Content3D = () => {
-    const { r0 } = useContext(RenderersContext);
+    const { r0 } = useRenderers();
     const renderer = r0;
-    const stack = useContext(StackContext);
+    const stack = useStack();
 
     console.log('rerender');
 

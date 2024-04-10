@@ -1,22 +1,23 @@
 import { useContext, useEffect } from 'react';
 import { SliceContext } from './Canvas2D.tsx';
-import { RenderersContext, StackContext } from '../QuadViewProvider.tsx';
 import * as THREE from 'three';
 import { localizerHelperFactory } from 'ami.js';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux.ts';
 import { helpersStatusSlice } from '../../store/reducers/helpersStatus.ts';
+import useRenderers from '../../hooks/useRenderers.ts';
+import useStack from '../../hooks/useStack.ts';
 
 const LocalizerHelper = () => {
     const { sliceOrientation } = useContext(SliceContext);
 
-    const { r1, r2, r3 } = useContext(RenderersContext);
+    const { r1, r2, r3 } = useRenderers();
     const renderer = sliceOrientation === 'axial' ? r1 : sliceOrientation === 'sagittal' ? r2 : r3;
 
     const stackHelpersStatus = useAppSelector((state) => state.helpersStatus.stackHelpersStatus);
     const { setLocalizerHelpersStatus } = helpersStatusSlice.actions;
     const dispatch = useAppDispatch();
 
-    const stack = useContext(StackContext);
+    const stack = useStack();
 
     const handleResize = () => {
         const domElement = renderer.domElement!;

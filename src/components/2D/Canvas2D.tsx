@@ -1,4 +1,4 @@
-import { createContext, FC, ReactNode, useContext, useEffect, useRef } from 'react';
+import { createContext, FC, ReactNode, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import {
     LocalizerHelper,
@@ -7,8 +7,8 @@ import {
     UtilsCore,
 } from 'ami.js';
 import useFrame from '../../hooks/useFrame.ts';
-import { RenderersContext } from '../QuadViewProvider.tsx';
 import renderer2D from '../../models/Renderer2D.ts';
+import useRenderers from '../../hooks/useRenderers.ts';
 
 interface Slice {
     sliceColor: number;
@@ -32,7 +32,7 @@ const Canvas2D: FC<Canvas2DProps> = ({
     targetId,
 }) => {
     const domElementRef = useRef<HTMLDivElement>(null);
-    const { r1, r2, r3 } = useContext(RenderersContext);
+    const { r1, r2, r3 } = useRenderers();
     const renderer = sliceOrientation === 'axial' ? r1 : sliceOrientation === 'sagittal' ? r2 : r3;
 
     const handleResize = () => {
@@ -173,14 +173,14 @@ const Canvas2D: FC<Canvas2DProps> = ({
             const scene = new THREE.Scene();
 
             //clip plane
-            const plane = new THREE.Plane(new THREE.Vector3(0, 0, 0), 0);
+            // const plane = new THREE.Plane(new THREE.Vector3(0, 0, 0), 0);
 
             renderer.domElement = domElementRef.current;
             renderer.gl = gl;
             renderer.controls = controls;
             renderer.camera = camera;
             renderer.scene = scene;
-            renderer.plane = plane;
+            // renderer.plane = plane;
 
             //resize camera and renderer first time
             handleResize();

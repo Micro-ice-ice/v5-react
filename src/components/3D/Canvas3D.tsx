@@ -1,8 +1,8 @@
-import { FC, ReactNode, useContext, useEffect, useRef } from 'react';
+import { FC, ReactNode, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { trackballControlFactory } from 'ami.js';
 import useFrame from '../../hooks/useFrame.ts';
-import { RenderersContext } from '../QuadViewProvider.tsx';
+import useRenderers from '../../hooks/useRenderers.ts';
 
 interface Canvas3DProps {
     children?: ReactNode;
@@ -12,7 +12,7 @@ interface Canvas3DProps {
 
 const Canvas3D: FC<Canvas3DProps> = ({ children, color = 0x212121, targetId }) => {
     const domElementRef = useRef<HTMLDivElement>(null);
-    const { r0 } = useContext(RenderersContext);
+    const { r0 } = useRenderers();
     const renderer = r0;
 
     useFrame(() => {

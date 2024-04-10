@@ -10,7 +10,7 @@ export interface Renderer2D {
     stackHelper?: AMI.StackHelper;
     localizerHelper?: AMI.LocalizerHelper;
     localizerScene?: THREE.Scene;
-    plane?: THREE.Plane;
+    // plane?: THREE.Plane;
 }
 
 export default Renderer2D;

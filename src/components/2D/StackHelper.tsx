@@ -1,19 +1,20 @@
 import { useContext, useEffect } from 'react';
 import { SliceContext } from './Canvas2D.tsx';
-import { RenderersContext, StackContext } from '../QuadViewProvider.tsx';
 import * as THREE from 'three';
 import { helpersStatusSlice } from '../../store/reducers/helpersStatus.ts';
 import { visibleStatusSlice } from '../../store/reducers/visibleStatus.ts';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux.ts';
+import { useAppDispatch } from '../../hooks/redux.ts';
 import * as AMI from 'ami.js';
+import useRenderers from '../../hooks/useRenderers.ts';
+import useStack from '../../hooks/useStack.ts';
 
 const StackHelper = () => {
     const { sliceColor, sliceOrientation } = useContext(SliceContext);
 
-    const { r0, r1, r2, r3 } = useContext(RenderersContext);
+    const { r0, r1, r2, r3 } = useRenderers();
     const renderer = sliceOrientation === 'axial' ? r1 : sliceOrientation === 'sagittal' ? r2 : r3;
 
-    const stack = useContext(StackContext);
+    const stack = useStack();
 
     const { setStackHelpersStatus } = helpersStatusSlice.actions;
     const { setDicomVisible } = visibleStatusSlice.actions;
@@ -104,32 +105,6 @@ const StackHelper = () => {
             }
         };
     });
-
-    return (
-        <>
-            <StackHelperVisible />
-        </>
-    );
-};
-
-const StackHelperVisible = () => {
-    const { sliceOrientation } = useContext(SliceContext);
-
-    const { r0, r1, r2, r3 } = useContext(RenderersContext);
-    const renderer = sliceOrientation === 'axial' ? r1 : sliceOrientation === 'sagittal' ? r2 : r3;
-
-    const { dicomVisible } = useAppSelector((state) => state.visibleStatus);
-
-    if (renderer.stackHelper) {
-        console.log(dicomVisible);
-        if (dicomVisible) {
-            renderer.scene?.add(renderer.stackHelper);
-            r0.scene?.add(renderer.stackHelper);
-        } else {
-            renderer.scene?.remove(renderer.stackHelper);
-            r0.scene?.remove(renderer.stackHelper);
-        }
-    }
 
     return <></>;
 };
