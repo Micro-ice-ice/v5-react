@@ -1,6 +1,6 @@
 import { createContext, FC, ReactNode, useRef } from 'react';
-import Renderer3D from '../../models/Renderer3D.ts';
-import Renderer2D from '../../models/Renderer2D.ts';
+import Renderer3D from '../../helpers/Renderer3D.ts';
+import Renderer2D from '../../helpers/Renderer2D.ts';
 
 interface Renderers {
     r0: Renderer3D;
@@ -9,9 +9,15 @@ interface Renderers {
     r3: Renderer2D;
 }
 
-export const RenderersContext = createContext<Renderers>({ r0: {}, r1: {}, r2: {}, r3: {} });
+export const RenderersContext = createContext<Renderers | null>(null);
+
 const RenderersProvider: FC<{ children?: ReactNode }> = ({ children }) => {
-    const rendererRef = useRef<Renderers>({ r0: {}, r1: {}, r2: {}, r3: {} });
+    const rendererRef = useRef<Renderers>({
+        r0: new Renderer3D(),
+        r1: new Renderer2D(),
+        r2: new Renderer2D(),
+        r3: new Renderer2D(),
+    });
 
     return (
         <RenderersContext.Provider value={rendererRef.current}>

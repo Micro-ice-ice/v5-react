@@ -2,8 +2,7 @@ import { useContext, useEffect } from 'react';
 import { SliceContext } from './Canvas2D.tsx';
 import * as THREE from 'three';
 import { helpersStatusSlice } from '../../store/reducers/helpersStatus.ts';
-import { visibleStatusSlice } from '../../store/reducers/visibleStatus.ts';
-import { useAppDispatch } from '../../hooks/redux.ts';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux.ts';
 import * as AMI from 'ami.js';
 import useRenderers from '../../hooks/useRenderers.ts';
 import useStack from '../../hooks/useStack.ts';
@@ -12,13 +11,14 @@ const StackHelper = () => {
     const { sliceColor, sliceOrientation } = useContext(SliceContext);
 
     const { r0, r1, r2, r3 } = useRenderers();
-    const renderer = sliceOrientation === 'axial' ? r1 : sliceOrientation === 'sagittal' ? r2 : r3;
+    const renderer = sliceOrientation === 'axial' ? r1 : sliceOrientation === 'sagittal' ? r2 : r3; //определяем текущией рендерер
 
     const stack = useStack();
 
     const { setStackHelpersStatus } = helpersStatusSlice.actions;
-    const { setDicomVisible } = visibleStatusSlice.actions;
     const dispatch = useAppDispatch();
+
+    const { dicomVisible } = useAppSelector((state) => state.visibleStatus);
 
     const handleResizeStackHelperCanvas = () => {
         const domElement = renderer.domElement!;
@@ -46,6 +46,7 @@ const StackHelper = () => {
 
     useEffect(() => {
         //Init Helper Stack
+
         if (stack) {
             const AmiStackHelper = AMI.stackHelperFactory(THREE);
             const stackHelper: AMI.StackHelper = new AmiStackHelper(stack);
@@ -72,16 +73,10 @@ const StackHelper = () => {
             renderer.camera!.box = box;
             renderer.camera!.orientation = sliceOrientation;
             renderer.camera!.update();
-            renderer.camera!.fitBox(2);
+            renderer.camera!.fitBox(2, 1);
 
             stackHelper.orientation = renderer.camera!.stackOrientation;
             stackHelper.index = Math.floor(stackHelper.orientationMaxIndex / 2);
-
-            renderer.camera!.add(stackHelper);
-
-            setDicomVisible(true);
-            renderer.scene?.add(stackHelper);
-            r0.scene?.add(renderer.scene!);
 
             stackHelpersStatusUpdate();
 
@@ -93,17 +88,34 @@ const StackHelper = () => {
         return () => {
             window.removeEventListener('resize', handleResizeStackHelperCanvas);
             //clear scene (stackHelper)
+
             if (renderer.scene && renderer.stackHelper) {
                 // renderer.scene.remove(...renderer.scene.children) //this clear all scene
 
                 renderer.camera!.remove(renderer.stackHelper);
-                renderer.scene.remove(renderer.stackHelper);
-                renderer.stackHelper.dispose();
-                r0.scene?.remove(renderer.stackHelper);
+                renderer.scene!.remove(renderer.stackHelper);
+                r0.scene!.remove(renderer.scene!);
 
+                renderer.stackHelper.dispose();
                 renderer.stackHelper = undefined;
             }
         };
+    }, [stack]);
+
+    //состояние видимости
+    useEffect(() => {
+        if (renderer.isInit && renderer.stackHelper) {
+            renderer.camera!.remove(renderer.stackHelper);
+            renderer.scene!.remove(renderer.stackHelper);
+            r0.scene!.remove(renderer.scene!);
+
+            if (dicomVisible) {
+                renderer.camera!.add(renderer.stackHelper);
+
+                renderer.scene?.add(renderer.stackHelper);
+                r0.scene?.add(renderer.scene!);
+            }
+        }
     });
 
     return <></>;

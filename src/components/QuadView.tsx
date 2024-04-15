@@ -1,4 +1,4 @@
-import QuadViewProvider from './QuadViewProvider.tsx';
+import QuadViewProvider from './providers/QuadViewProvider.tsx';
 import Canvas3D from './3D/Canvas3D.tsx';
 import Content3D from './3D/Content3D.tsx';
 import Canvas2D from './2D/Canvas2D.tsx';

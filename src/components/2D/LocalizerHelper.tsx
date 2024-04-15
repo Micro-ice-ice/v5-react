@@ -1,16 +1,17 @@
 import { useContext, useEffect } from 'react';
 import { SliceContext } from './Canvas2D.tsx';
 import * as THREE from 'three';
-import { localizerHelperFactory } from 'ami.js';
+import { localizerHelperFactory, LocalizerHelper as AmiLocalizerHelper } from 'ami.js';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux.ts';
 import { helpersStatusSlice } from '../../store/reducers/helpersStatus.ts';
 import useRenderers from '../../hooks/useRenderers.ts';
 import useStack from '../../hooks/useStack.ts';
+import renderer2D from '../../helpers/Renderer2D.ts';
 
 const LocalizerHelper = () => {
     const { sliceOrientation } = useContext(SliceContext);
 
-    const { r1, r2, r3 } = useRenderers();
+    const { r0, r1, r2, r3 } = useRenderers();
     const renderer = sliceOrientation === 'axial' ? r1 : sliceOrientation === 'sagittal' ? r2 : r3;
 
     const stackHelpersStatus = useAppSelector((state) => state.helpersStatus.stackHelpersStatus);
@@ -131,8 +132,7 @@ const LocalizerHelper = () => {
             renderer.localizerHelper!.canvasWidth = domElement.clientWidth;
             renderer.localizerHelper!.canvasHeight = domElement.clientHeight;
 
-            renderer.localizerScene = new THREE.Scene();
-            renderer.localizerScene.add(renderer.localizerHelper!);
+            renderer.scene?.add(renderer.localizerHelper!);
 
             stackHelpersStatusUpdate();
 
@@ -142,8 +142,6 @@ const LocalizerHelper = () => {
         }
 
         return () => {
-            window.removeEventListener('resize', handleResize);
-
             if (renderer.scene && renderer.localizerHelper) {
                 // renderer.scene.remove(...renderer.scene.children) //this clear all scene
 
@@ -151,9 +149,54 @@ const LocalizerHelper = () => {
                 renderer.localizerHelper.dispose();
 
                 renderer.localizerHelper = undefined;
+
+                window.removeEventListener('resize', handleResize);
             }
         };
+    }, [stack, stackHelpersStatus]);
+
+    useEffect(() => {
+        if (renderer.isInit && renderer.localizerHelper) {
+            renderer.camera!.remove(renderer.localizerHelper);
+            renderer.scene!.remove(renderer.localizerHelper);
+            r0.scene!.remove(renderer.scene!);
+
+            if (dicomVisible) {
+                renderer.camera!.add(renderer.localizerHelper);
+
+                renderer.scene?.add(renderer.localizerHelper);
+                r0.scene?.add(renderer.scene!);
+            }
+        }
     });
+
+    const updateLocalizer = (
+        renderer: renderer2D,
+        targetLocalizersHelpers: AmiLocalizerHelper[]
+    ) => {
+        const stackHelper = renderer.stackHelper!;
+        const localizerHelper = renderer.localizerHelper!;
+        const plane = stackHelper.slice.cartesianEquation();
+        localizerHelper.referencePlane = plane;
+
+        // bit of a hack... works fine for this application
+        for (let i = 0; i < targetLocalizersHelpers.length; i++) {
+            for (let j = 0; j < 3; j++) {
+                const targetPlane = targetLocalizersHelpers[i]['plane' + (j + 1)];
+                if (
+                    targetPlane &&
+                    plane.x.toFixed(6) === targetPlane.x.toFixed(6) &&
+                    plane.y.toFixed(6) === targetPlane.y.toFixed(6) &&
+                    plane.z.toFixed(6) === targetPlane.z.toFixed(6)
+                ) {
+                    targetLocalizersHelpers[i]['plane' + (j + 1)] = plane;
+                }
+            }
+        }
+
+        // update the geometry will create a new mesh
+        localizerHelper.geometry = stackHelper.slice.geometry;
+    };
 
     const { dicomVisible } = useAppSelector((state) => state.visibleStatus);
 

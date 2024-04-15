@@ -10,7 +10,7 @@
         "preview": "vite preview"
     },
     "dependencies": {
-        "ozaki-api": "file:C:\\Sirius\\Rnd\\zeroapp\\ozaki\\api",
+        "ozaki-api": "https://github.com/drgerber/test/releases/download/v1.1.5/ozaki-api-1.1.5.tar.gz",
         "@emotion/react": "^11.11.1",
         "@emotion/styled": "^11.11.0",
         "@mui/icons-material": "^5.14.9",

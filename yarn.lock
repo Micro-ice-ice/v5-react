@@ -3160,8 +3160,9 @@ osenv@^0.1.0:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.0"
 
-"ozaki-api@file:../zeroapp/ozaki/api":
+"ozaki-api@https://github.com/drgerber/test/releases/download/v1.1.5/ozaki-api-1.1.5.tar.gz":
   version "1.1.5"
+  resolved "https://github.com/drgerber/test/releases/download/v1.1.5/ozaki-api-1.1.5.tar.gz#eea3c10d2926db099002b79f273c026a9bf590e7"
   dependencies:
     "@msgpack/msgpack" "^3.0.0-beta2"
 

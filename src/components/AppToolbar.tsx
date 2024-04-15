@@ -22,6 +22,8 @@ import AppToolbarButton from './AppToolbarButton.tsx';
 import { NestedMenuItem } from 'mui-nested-menu';
 import { db } from '../db/db.ts';
 import DicomLoader from '../helpers/Dicom/DicomLoader.ts';
+import { useAppDispatch, useAppSelector } from '../hooks/redux.ts';
+import { visibleStatusSlice } from '../store/reducers/visibleStatus.ts';
 
 const AppToolbar = () => {
     const theme = createTheme({
@@ -73,6 +75,13 @@ const AppToolbar = () => {
         handleCloseNotes();
     };
 
+    const dispatch = useAppDispatch();
+    const { setDicomVisible, setAortaVisible } = visibleStatusSlice.actions;
+
+    const handleShowOnlyAorta = () => {
+        dispatch(setDicomVisible(false));
+    };
+
     return (
         <ThemeProvider theme={theme}>
             <AppBar position="static" color="primary">
@@ -118,7 +127,7 @@ const AppToolbar = () => {
                         <MenuItem>Сегментировать аорту</MenuItem>
                         <MenuItem>Вычислить расстояния между точками комиссур</MenuItem>
                         <MenuItem>Показать срез</MenuItem>
-                        <MenuItem>Показать только аорту</MenuItem>
+                        <MenuItem onClick={handleShowOnlyAorta}>Показать только аорту</MenuItem>
                         <NestedMenuItem
                             label={'Линия пришивания'}
                             parentMenuOpen={openNotes}

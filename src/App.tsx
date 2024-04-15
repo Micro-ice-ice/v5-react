@@ -3,6 +3,8 @@ import AppToolbar from './components/AppToolbar.tsx';
 import PatientCardList from './components/PatientCardList.tsx';
 import { Stack } from '@mui/material';
 import QuadView from './components/QuadView.tsx';
+import FileLoadProgressSnackbar from './components/Snackbars/FileLoadProgressSnackbar.tsx';
+import AortaSegmentProgressSnackbar from './components/Snackbars/AortaSegmentProgressSnackbar.tsx';
 
 function App() {
     return (
@@ -13,6 +15,8 @@ function App() {
                 <PatientCardList />
                 <QuadView />
             </Stack>
+            <FileLoadProgressSnackbar />
+            <AortaSegmentProgressSnackbar />
         </div>
     );
 }

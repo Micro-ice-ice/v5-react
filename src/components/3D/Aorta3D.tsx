@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { MeshLambertMaterial } from 'three';
 import { useAppSelector } from '../../hooks/redux.ts';
 import useRenderers from '../../hooks/useRenderers.ts';
 import useAorta from '../../hooks/useAorta.ts';
@@ -19,8 +18,6 @@ const Aorta3D = () => {
             if (renderer.scene) {
                 if (aortaMesh) {
                     renderer.scene.remove(aortaMesh);
-                    aortaMesh.geometry.dispose();
-                    (aortaMesh.material as MeshLambertMaterial).dispose();
                 }
 
                 // renderer.scene.remove(...renderer.scene!.children);

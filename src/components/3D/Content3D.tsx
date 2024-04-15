@@ -10,8 +10,6 @@ const Content3D = () => {
     const renderer = r0;
     const stack = useStack();
 
-    console.log('rerender');
-
     useEffect(() => {
         if (stack) {
             // center 3d camera/control on the stack

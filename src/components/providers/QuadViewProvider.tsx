@@ -1,8 +1,8 @@
 import { FC, ReactNode } from 'react';
 
-import RenderersProvider from './providers/RenderersProvider.tsx';
-import StackProvider from './providers/StackProvider.tsx';
-import AortaProvider from './providers/AortaProvider.tsx';
+import RenderersProvider from './RenderersProvider.tsx';
+import StackProvider from './StackProvider.tsx';
+import AortaProvider from './AortaProvider.tsx';
 
 const QuadViewProvider: FC<{ children?: ReactNode }> = ({ children }) => {
     return (

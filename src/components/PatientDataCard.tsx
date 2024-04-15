@@ -7,6 +7,8 @@ import { useAppDispatch, useAppSelector } from '../hooks/redux.ts';
 import { currentPatientDataSlice } from '../store/reducers/currentPatientData.ts';
 import { ServiceAPI } from 'ozaki-api';
 import { db } from '../db/db.ts';
+import { visibleStatusSlice } from '../store/reducers/visibleStatus.ts';
+import getWebSocketUrl from '../API/getUrl.ts';
 
 interface PatientDataCardProps {
     patient: Patient;
@@ -16,6 +18,7 @@ interface PatientDataCardProps {
 const PatientDataCard: React.FC<PatientDataCardProps> = ({ patientData, patient }) => {
     const currentPatientData = useAppSelector((state) => state.currentPatientData);
     const { selectPatientData } = currentPatientDataSlice.actions;
+    const { setDicomVisible, setAortaVisible } = visibleStatusSlice.actions;
     const dispatch = useAppDispatch();
 
     const [open, setOpen] = useState(false);
@@ -30,6 +33,7 @@ const PatientDataCard: React.FC<PatientDataCardProps> = ({ patientData, patient 
             db.patientsData.get(patientData.id).then((value) => {
                 if (value) {
                     const apiUrl = 'ws://localhost:7000/';
+                    // const apiUrl = getWebSocketUrl();
                     const ozakiApi = new ServiceAPI(apiUrl);
 
                     ozakiApi.segaorta(value.dicomFiles, threshold).then((file) => {
@@ -56,6 +60,9 @@ const PatientDataCard: React.FC<PatientDataCardProps> = ({ patientData, patient 
         if (currentPatientData.patientData?.id != patientData.id) {
             dispatch(selectPatientData(patientData));
         }
+
+        dispatch(setDicomVisible(true));
+        dispatch(setAortaVisible(true));
     };
 
     return (
