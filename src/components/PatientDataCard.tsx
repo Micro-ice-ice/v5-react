@@ -32,8 +32,8 @@ const PatientDataCard: React.FC<PatientDataCardProps> = ({ patientData, patient 
         if (threshold) {
             db.patientsData.get(patientData.id).then((value) => {
                 if (value) {
-                    const apiUrl = 'ws://localhost:7000/';
-                    // const apiUrl = getWebSocketUrl();
+                    // const apiUrl = 'ws://localhost:7000/';
+                    const apiUrl = getWebSocketUrl();
                     const ozakiApi = new ServiceAPI(apiUrl);
 
                     ozakiApi.segaorta(value.dicomFiles, threshold).then((file) => {
