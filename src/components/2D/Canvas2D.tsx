@@ -1,6 +1,5 @@
 import { createContext, FC, ReactNode, useEffect, useRef } from 'react';
 
-import { LocalizerHelper } from 'ami.js';
 import useFrame from '../../hooks/useFrame.ts';
 import useRenderers from '../../hooks/useRenderers.ts';
 

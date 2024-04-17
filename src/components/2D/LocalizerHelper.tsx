@@ -1,12 +1,11 @@
 import { useContext, useEffect } from 'react';
 import { SliceContext } from './Canvas2D.tsx';
 import * as THREE from 'three';
-import { localizerHelperFactory, LocalizerHelper as AmiLocalizerHelper } from 'ami.js';
+import { localizerHelperFactory } from 'ami.js';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux.ts';
 import { helpersStatusSlice } from '../../store/reducers/helpersStatus.ts';
 import useRenderers from '../../hooks/useRenderers.ts';
 import useStack from '../../hooks/useStack.ts';
-import renderer2D from '../../helpers/Renderer2D.ts';
 
 const LocalizerHelper = () => {
     const { sliceOrientation } = useContext(SliceContext);
@@ -170,33 +169,33 @@ const LocalizerHelper = () => {
         }
     });
 
-    const updateLocalizer = (
-        renderer: renderer2D,
-        targetLocalizersHelpers: AmiLocalizerHelper[]
-    ) => {
-        const stackHelper = renderer.stackHelper!;
-        const localizerHelper = renderer.localizerHelper!;
-        const plane = stackHelper.slice.cartesianEquation();
-        localizerHelper.referencePlane = plane;
-
-        // bit of a hack... works fine for this application
-        for (let i = 0; i < targetLocalizersHelpers.length; i++) {
-            for (let j = 0; j < 3; j++) {
-                const targetPlane = targetLocalizersHelpers[i]['plane' + (j + 1)];
-                if (
-                    targetPlane &&
-                    plane.x.toFixed(6) === targetPlane.x.toFixed(6) &&
-                    plane.y.toFixed(6) === targetPlane.y.toFixed(6) &&
-                    plane.z.toFixed(6) === targetPlane.z.toFixed(6)
-                ) {
-                    targetLocalizersHelpers[i]['plane' + (j + 1)] = plane;
-                }
-            }
-        }
-
-        // update the geometry will create a new mesh
-        localizerHelper.geometry = stackHelper.slice.geometry;
-    };
+    // const updateLocalizer = (
+    //     renderer: renderer2D,
+    //     targetLocalizersHelpers: AmiLocalizerHelper[]
+    // ) => {
+    //     const stackHelper = renderer.stackHelper!;
+    //     const localizerHelper = renderer.localizerHelper!;
+    //     const plane = stackHelper.slice.cartesianEquation();
+    //     localizerHelper.referencePlane = plane;
+    //
+    //     // bit of a hack... works fine for this application
+    //     for (let i = 0; i < targetLocalizersHelpers.length; i++) {
+    //         for (let j = 0; j < 3; j++) {
+    //             const targetPlane = targetLocalizersHelpers[i]['plane' + (j + 1)];
+    //             if (
+    //                 targetPlane &&
+    //                 plane.x.toFixed(6) === targetPlane.x.toFixed(6) &&
+    //                 plane.y.toFixed(6) === targetPlane.y.toFixed(6) &&
+    //                 plane.z.toFixed(6) === targetPlane.z.toFixed(6)
+    //             ) {
+    //                 targetLocalizersHelpers[i]['plane' + (j + 1)] = plane;
+    //             }
+    //         }
+    //     }
+    //
+    //     // update the geometry will create a new mesh
+    //     localizerHelper.geometry = stackHelper.slice.geometry;
+    // };
 
     const { dicomVisible } = useAppSelector((state) => state.visibleStatus);
 

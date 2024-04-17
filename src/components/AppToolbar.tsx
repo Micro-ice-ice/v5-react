@@ -22,7 +22,7 @@ import AppToolbarButton from './AppToolbarButton.tsx';
 import { NestedMenuItem } from 'mui-nested-menu';
 import { db } from '../db/db.ts';
 import DicomLoader from '../helpers/Dicom/DicomLoader.ts';
-import { useAppDispatch, useAppSelector } from '../hooks/redux.ts';
+import { useAppDispatch } from '../hooks/redux.ts';
 import { visibleStatusSlice } from '../store/reducers/visibleStatus.ts';
 
 const AppToolbar = () => {
@@ -76,7 +76,7 @@ const AppToolbar = () => {
     };
 
     const dispatch = useAppDispatch();
-    const { setDicomVisible, setAortaVisible } = visibleStatusSlice.actions;
+    const { setDicomVisible } = visibleStatusSlice.actions;
 
     const handleShowOnlyAorta = () => {
         dispatch(setDicomVisible(false));
